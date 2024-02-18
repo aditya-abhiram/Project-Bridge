@@ -1,30 +1,21 @@
-import React from 'react'
-import "./Login.css"
+// Frontend Login.js
+import React from 'react';
+import "./Login.css";
+
 const Login = () => {
-  const loginwithgoogle = ()=>{
-    window.open("http://localhost:8000/auth/google/callback","_self")
+  const handleGoogleLogin = (userType) => {
+    window.location.href = `http://localhost:8000/auth/google?user_type=${userType}`; // Pass userType as query parameter
   }
+
   return (
     <div className="login-page">
-      <h1 style = {{textAlign:"center"}}>
-          Login
-      </h1>
+      <h1 style={{ textAlign: "center" }}>Login</h1>
       <div className='form'>
-        <form className='login-form'>
-            <input type='text' name='' id='' placeholder='username' />
-            <input type='password' name='' id='' placeholder='password'/>
-            <button> Login </button>
-            <p className='message'>
-               Not Registered ? <a href="#">Create an account</a>
-            </p>
-        </form>
-        <button className='login-with-google-btn' onClick={loginwithgoogle}>
-          Sign In with Google
-        </button>
+        <button className='login-with-google-btn' onClick={() => handleGoogleLogin('teacher')}>Login as Teacher</button>
+        <button className='login-with-google-btn' onClick={() => handleGoogleLogin('student')}>Login as Student</button>
       </div>
-      
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
