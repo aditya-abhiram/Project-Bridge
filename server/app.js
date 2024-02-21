@@ -7,7 +7,9 @@ const PORT = 8000;
 const session = require("express-session");
 const passport = require("passport");
 const OAuth2Strategy = require("passport-google-oauth20").Strategy;
-const userdb = require("./model/userSchema")
+const userdb = require("./model/userSchema");
+const studentdb = require("./model/studentSchema");
+const teacherdb = require("./model/teacherSchema");
 
 const clientid = "349131111223-051qe5l8u963f6pk1260l89qk7f0tue2.apps.googleusercontent.com";
 const clientsecret = "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";
@@ -77,6 +79,23 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
+app.get("/users/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await userdb.findOne({ googleId: userId });
+
+        if (!user) {
+            res.status(404).json({ error: "User not found" });
+            return;
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+
 // Backend app.js
 // initial google ouath login
 app.get("/auth/google", (req, res, next) => {
@@ -88,13 +107,11 @@ app.get("/auth/google", (req, res, next) => {
     })(req, res, next);
 });
 
-// Google OAuth callback route
-// Google OAuth callback route
 app.get("/auth/google/callback", (req, res, next) => {
     passport.authenticate("google", {
         failureRedirect: "http://localhost:3000/login"
     })(req, res, next);
-}, (req, res) => {
+}, async (req, res) => {
     console.log("Authenticated successfully");
     console.log("Query parameters:", req.query); // Log the entire query object
     const userType = req.query.state; // Retrieve userType from state parameter
@@ -110,28 +127,39 @@ app.get("/auth/google/callback", (req, res, next) => {
             expectedRole = 'other';
             // expectedRole = 'teacher';(Final code while deploying)
         }
-    } else{
+    } else {
         expectedRole = 'teacher';
         // expectedRole = 'other';(Final code while deploying)
     }
-    
 
     if (expectedRole !== userType) {
         res.redirect("http://localhost:3000/error"); // Redirect to error page if roles mismatch
         return;
     }
 
+    const userId = req.user.googleId; // Extract userId from Google account
+
+    // Save userId in teachers or students collection based on user_type
     if (userType === 'teacher') {
-        res.redirect("http://localhost:3000/TeacherHome");
+        const teacher = new teacherdb({
+            userId: userId,
+            roomNumber: "", // Add room number as per your requirements
+            department: "" // Add department as per your requirements
+        });
+        await teacher.save();
+        res.redirect(`http://localhost:3000/TeacherHome/${userId}`);
     } else if (userType === 'student') {
-        res.redirect("http://localhost:3000/StudentHome");
+        const student = new studentdb({
+            userId: userId,
+            idNumber: "", // Add id number as per your requirements
+            branch: "" // Add branch as per your requirements
+        });
+        await student.save();
+        res.redirect(`http://localhost:3000/StudentHome/${userId}`);
     } else {
         res.redirect("http://localhost:3000/login");
     }
 });
-
-
-
 
 
 app.get("/login/success", async (req, res) => {
