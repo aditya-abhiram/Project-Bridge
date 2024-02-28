@@ -107,7 +107,7 @@ app.get("/auth/google", (req, res, next) => {
     })(req, res, next);
 });
 
-app.get("/auth/google/callback", (req, res, next) => {
+app.get("/auth/google/callback", async (req, res, next) => {
     passport.authenticate("google", {
         failureRedirect: "http://localhost:3000/login"
     })(req, res, next);
@@ -139,28 +139,35 @@ app.get("/auth/google/callback", (req, res, next) => {
 
     const userId = req.user.googleId; // Extract userId from Google account
 
-    // Save userId in teachers or students collection based on user_type
+    // Check if the user already exists in the respective collection
+    let userExists = false;
     if (userType === 'teacher') {
-        const teacher = new teacherdb({
-            userId: userId,
-            roomNumber: "", // Add room number as per your requirements
-            department: "" // Add department as per your requirements
-        });
-        await teacher.save();
-        res.redirect(`http://localhost:3000/TeacherHome/${userId}`);
+        userExists = await teacherdb.exists({ userId });
     } else if (userType === 'student') {
-        const student = new studentdb({
-            userId: userId,
-            idNumber: "", // Add id number as per your requirements
-            branch: "" // Add branch as per your requirements
-        });
-        await student.save();
-        res.redirect(`http://localhost:3000/StudentHome/${userId}`);
-    } else {
-        res.redirect("http://localhost:3000/login");
+        userExists = await studentdb.exists({ userId });
     }
-});
 
+    if (!userExists) {
+        // Save userId in teachers or students collection based on user_type
+        if (userType === 'teacher') {
+            const teacher = new teacherdb({
+                userId: userId,
+                roomNumber: "", // Add room number as per your requirements
+                department: "" // Add department as per your requirements
+            });
+            await teacher.save();
+        } else if (userType === 'student') {
+            const student = new studentdb({
+                userId: userId,
+                idNumber: "", // Add id number as per your requirements
+                branch: "" // Add branch as per your requirements
+            });
+            await student.save();
+        }
+    }
+
+    res.redirect(`http://localhost:3000/${userType === 'teacher' ? 'TeacherHome' : 'StudentHome'}/${userId}`);
+});
 
 app.get("/login/success", async (req, res) => {
     console.log("Login success route hit");
