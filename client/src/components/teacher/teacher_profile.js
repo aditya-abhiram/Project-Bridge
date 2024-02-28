@@ -71,12 +71,27 @@ const TeacherProfile = () => {
           <button type="button" onClick={toggleEditMode}>Edit</button>
         )}
         <br/><br/>
-        <label htmlFor="name">Name:</label>
+        <label htmlFor="name">Name</label><br/>
         <input type="text" id="name" name="name" value={formData.name} onChange={handleInputChange} disabled={!editMode} /><br/><br/>
-        <label htmlFor="roomNumber">Room Number:</label>
+        <label htmlFor="roomNumber">Room Number</label><br/>
         <input type="text" id="roomNumber" name="roomNumber" value={formData.roomNumber} onChange={handleInputChange} disabled={!editMode} /> <br/><br/>
-        <label htmlFor="department">Department:</label>
-        <input type="text" id="department" name="department" value={formData.department} onChange={handleInputChange} disabled={!editMode} /> <br/><br/>
+        <label htmlFor="department">Department</label><br/>
+        <select id="department" name="department" value={formData.department} onChange={handleInputChange} disabled={!editMode}> 
+          <option value="">Select Department</option>
+          <option value="BIO">Biological Sciences (BIO)</option>
+          <option value="CHE">Chemical Engineering (CHE)</option>
+          <option value="CHEM">Chemistry (CHEM)</option>
+          <option value="CE">Civil Engineering (CE)</option>
+          <option value="CS">Computer Science (CS)</option>
+          <option value="ECON">Economics and Finance (ECON)</option>
+          <option value="EEE">Electrical & Electronics Engineering (EEE)</option>
+          <option value="HSS">Humanities and Social Sciences (HSS)</option>
+          <option value="MATH">Mathematics (MATH)</option>
+          <option value="ME">Mechanical Engineering (ME)</option>
+          <option value="PHA">Pharmacy (PHA)</option>
+          <option value="PHY">Physics(PHY)</option>
+        </select><br/><br/>
+        
       </form>
     </div>
   );

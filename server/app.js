@@ -152,9 +152,9 @@ app.get("/students/:userId", async (req, res) => {
 app.put("/students/:userId", async (req, res) => {
     try {
         const userId = req.params.userId;
-        const { name, idNumber, branch } = req.body;
+        const { name, idNumber, degree, firstDegree, secondDegree } = req.body;
 
-        const updatedStudent = await studentdb.findOneAndUpdate({ userId }, { name, idNumber, branch }, { new: true });
+        const updatedStudent = await studentdb.findOneAndUpdate({ userId }, { name, idNumber, degree, firstDegree, secondDegree  }, { new: true });
 
         if (!updatedStudent) {
             res.status(404).json({ error: "Student not found" });
@@ -234,7 +234,9 @@ app.get("/auth/google/callback", async (req, res, next) => {
                 userId: userId,
                 name: name,
                 idNumber: "", // Add id number as per your requirements
-                branch: "" // Add branch as per your requirements
+                degree: "",
+                firstDegree: "",
+                secondDegree: "",
             });
             await student.save();
         }
