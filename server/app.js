@@ -83,7 +83,7 @@ app.get("/users/:userId", async (req, res) => {
     try {
         const userId = req.params.userId;
         const user = await userdb.findOne({ googleId: userId });
-
+        
         if (!user) {
             res.status(404).json({ error: "User not found" });
             return;
@@ -138,7 +138,7 @@ app.get("/auth/google/callback", async (req, res, next) => {
     }
 
     const userId = req.user.googleId; // Extract userId from Google account
-
+    const name = req.user.displayName;
     // Check if the user already exists in the respective collection
     let userExists = false;
     if (userType === 'teacher') {
@@ -152,6 +152,7 @@ app.get("/auth/google/callback", async (req, res, next) => {
         if (userType === 'teacher') {
             const teacher = new teacherdb({
                 userId: userId,
+                name: name,
                 roomNumber: "", // Add room number as per your requirements
                 department: "" // Add department as per your requirements
             });
@@ -159,6 +160,7 @@ app.get("/auth/google/callback", async (req, res, next) => {
         } else if (userType === 'student') {
             const student = new studentdb({
                 userId: userId,
+                name: name,
                 idNumber: "", // Add id number as per your requirements
                 branch: "" // Add branch as per your requirements
             });

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const teacherSchema = new mongoose.Schema({
     userId: String,
+    name: String,
     roomNumber: String,
     department: String
 });
