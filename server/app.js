@@ -95,7 +95,6 @@ app.get("/users/:userId", async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 // server/app.js
 
 // Backend app.js
@@ -168,10 +167,8 @@ app.put("/students/:userId", async (req, res) => {
     }
 });
 // Backend app.js
-=======
 
 // Backend app.js
->>>>>>> dab79fce21e4c2077b740e54a70ae5c26e5b2fc9
 // initial google ouath login
 app.get("/auth/google", (req, res, next) => {
     const userType = req.query.user_type;
