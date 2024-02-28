@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -78,6 +79,23 @@ const TeacherProfile = () => {
         <label htmlFor="department">Department:</label>
         <input type="text" id="department" name="department" value={formData.department} onChange={handleInputChange} disabled={!editMode} /> <br/><br/>
       </form>
+=======
+import React from 'react';
+import { useParams } from 'react-router-dom';
+
+const TeacherProfile = () => {
+  const { userId } = useParams();
+
+  // Fetch teacher data based on userId
+  // ...
+
+  return (
+    <div>
+      <h1>Teacher Profile</h1>
+      {/* Display teacher profile information */}
+      {/* ... */}
+      <p>User ID: {userId}</p>
+>>>>>>> dab79fce21e4c2077b740e54a70ae5c26e5b2fc9
     </div>
   );
 };
