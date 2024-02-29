@@ -118,9 +118,9 @@ app.get("/teachers/:userId", async (req, res) => {
 app.put("/teachers/:userId", async (req, res) => {
     try {
         const userId = req.params.userId;
-        const { name, roomNumber, department } = req.body;
+        const { name, block, roomNumber, department } = req.body;
 
-        const updatedTeacher = await teacherdb.findOneAndUpdate({ userId }, { name, roomNumber, department }, { new: true });
+        const updatedTeacher = await teacherdb.findOneAndUpdate({ userId }, { name, block, roomNumber, department }, { new: true });
 
         if (!updatedTeacher) {
             res.status(404).json({ error: "Teacher not found" });
@@ -225,6 +225,7 @@ app.get("/auth/google/callback", async (req, res, next) => {
             const teacher = new teacherdb({
                 userId: userId,
                 name: name,
+                block: "",
                 roomNumber: "", // Add room number as per your requirements
                 department: "" // Add department as per your requirements
             });

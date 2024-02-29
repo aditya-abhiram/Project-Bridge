@@ -76,13 +76,12 @@ const StudentProfile = () => {
 
   return (
     <div>
-      <h1>Student Profile</h1>
       <form onSubmit={handleSubmit}>
         <h2>My Profile</h2>
         {editMode ? (
           <>
             <button type="submit">Save</button>
-            <button type="button" onClick={toggleEditMode}>Cancel</button>
+
           </>
         ) : (
           <button type="button" onClick={toggleEditMode}>Edit</button>
@@ -120,7 +119,7 @@ const StudentProfile = () => {
           </label>
         </div><br/>
         <div>
-          <label htmlFor="firstDegree">First Degree:</label><br/>
+          <label htmlFor="firstDegree">B.E Degree</label><br/>
           <select
             id="firstDegree"
             name="firstDegree"
@@ -128,15 +127,19 @@ const StudentProfile = () => {
             onChange={handleInputChange}
             disabled={!editMode}
           >
-            <option value="">Select Degree</option>
-            <option value="CS">Computer Science</option>
-            <option value="ECE">Electronics and Communication</option>
-            <option value="EEE">Electrical and Electronics</option>
-            <option value="MECH">Mechanical</option>
+            <option value="">Select B.E Degree</option>
+            <option value="CE">Civil Engineering(CE)</option>
+            <option value="CHE">Chemical Engineering(CHE)</option>
+            <option value="CS">Computer Science Engineering (CSE)</option>
+            <option value="ECE">Electronics and Communication Engineering(ECE)</option>
+            <option value="EEE">Electrical and Electronics Engineering (EEE)</option>
+            <option value="ENI">Electronics and Instrumention Engineering (ENI)</option>
+            <option value="ME">Mechanical Engineering (ME)</option>
+            <option value="PHA">B.Pharma (PHA)</option>
           </select>
         </div><br/>
         <div>
-          <label htmlFor="secondDegree">Second Degree:</label><br/>
+          <label htmlFor="secondDegree">MSc. Degree</label><br/>
           <select
             id="secondDegree"
             name="secondDegree"
@@ -144,14 +147,16 @@ const StudentProfile = () => {
             onChange={handleInputChange}
             disabled={!editMode || formData.degree !== "Dual Degree"}
           >
-            <option value="">Select Degree</option>
-            <option value="MATH">Mathematics</option>
-            <option value="PHY">Physics</option>
-            <option value="CHE">Chemistry</option>
-            <option value="ECON">Economics</option>
+            <option value="">Select MSc. Degree</option>
+            <option value="BIO">Biology (BIO)</option>
+            <option value="CHEM">Chemistry (CHEM)</option>
+            <option value="ECON">Economics (ECON)</option>
+            <option value="MATH">Mathematics (MATH)</option>
+            <option value="PHY">Physics (PHY)</option>
+            
           </select>
         </div>
-        
+
       </form>
     </div>
   );

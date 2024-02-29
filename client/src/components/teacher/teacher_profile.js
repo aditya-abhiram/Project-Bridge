@@ -7,8 +7,9 @@ const TeacherProfile = () => {
   const [teacherData, setTeacherData] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
+    block: "",
     roomNumber: "",
-    department: ""
+    department: "",
   });
   const [editMode, setEditMode] = useState(false);
 
@@ -65,7 +66,6 @@ const TeacherProfile = () => {
         {editMode ? (
           <>
             <button type="submit">Save</button>
-            <button type="button" onClick={toggleEditMode}>Cancel</button>
           </>
         ) : (
           <button type="button" onClick={toggleEditMode}>Edit</button>
@@ -73,8 +73,21 @@ const TeacherProfile = () => {
         <br/><br/>
         <label htmlFor="name">Name</label><br/>
         <input type="text" id="name" name="name" value={formData.name} onChange={handleInputChange} disabled={!editMode} /><br/><br/>
+        <label htmlFor="block">Block</label><br/>
+        <select id="block" name="block" value={formData.block} onChange={handleInputChange} disabled={!editMode}> 
+          <option value="">Select Block</option>
+          <option value="A">A - Block</option>
+          <option value="B">B - Block</option>
+          <option value="C">C - Block</option>
+          <option value="D">D - Block</option>
+          <option value="E">E - Block</option>
+          <option value="H">H - Block</option>
+          <option value="I">I - Block</option>
+          <option value="J">J - Block</option>
+          <option value="K">K - Block</option>
+        </select><br/><br/>
         <label htmlFor="roomNumber">Room Number</label><br/>
-        <input type="text" id="roomNumber" name="roomNumber" value={formData.roomNumber} onChange={handleInputChange} disabled={!editMode} /> <br/><br/>
+        <input type="text" pattern="\d*" maxlength="3" id="roomNumber" name="roomNumber"value={formData.roomNumber} onChange={handleInputChange} disabled={!editMode} /> <br/><br/>
         <label htmlFor="department">Department</label><br/>
         <select id="department" name="department" value={formData.department} onChange={handleInputChange} disabled={!editMode}> 
           <option value="">Select Department</option>
