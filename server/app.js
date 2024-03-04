@@ -10,9 +10,9 @@ const OAuth2Strategy = require("passport-google-oauth20").Strategy;
 const userdb = require("./model/userSchema");
 const studentdb = require("./model/studentSchema");
 const teacherdb = require("./model/teacherSchema");
-
-const clientid = "349131111223-051qe5l8u963f6pk1260l89qk7f0tue2.apps.googleusercontent.com";
-const clientsecret = "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";
+const projectdb = require("./model/projectSchema")
+const clientid = process.env.CLIENT_ID;
+const clientsecret = process.env.CLEINT_SECRET;
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -95,10 +95,7 @@ app.get("/users/:userId", async (req, res) => {
     }
 });
 
-// server/app.js
 
-// Backend app.js
-// Route to fetch teacher data by userId
 app.get("/teachers/:userId", async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -166,10 +163,8 @@ app.put("/students/:userId", async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
-// Backend app.js
 
-// Backend app.js
-// initial google ouath login
+
 app.get("/auth/google", (req, res, next) => {
     const userType = req.query.user_type;
     const authURL = `/auth/google/callback`;
