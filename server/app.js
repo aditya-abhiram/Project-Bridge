@@ -12,7 +12,7 @@ const studentdb = require("./model/studentSchema");
 const teacherdb = require("./model/teacherSchema");
 const projectdb = require("./model/projectSchema")
 const clientid = process.env.CLIENT_ID;
-const clientsecret = process.env.CLEINT_SECRET;
+const clientsecret = process.env.CLIENT_SECRET;
 
 app.use(cors({
     origin: "http://localhost:3000",
