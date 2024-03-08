@@ -21,6 +21,30 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.post("/saveProject", async (req, res) => {
+    try {
+      const { teacherId, projectName, projectDescription, projectType, projectDomain, cgpaCutoff, prerequisites } = req.body;
+  
+      // Create a new project instance
+      const newProject = new projectdb({
+        teacherId,
+        project_name: projectName,
+        project_description: projectDescription,
+        project_type: projectType,
+        project_domain: projectDomain,
+        cg_cutoff: cgpaCutoff,
+        pre_requisites: prerequisites
+      });
+  
+      // Save the project to the database
+      const savedProject = await newProject.save();
+  
+      res.status(201).json(savedProject); // Return the saved project
+    } catch (error) {
+      console.error("Error saving project:", error);
+      res.status(500).json({ error: "Failed to save project" });
+    }
+  });
 // setup session
 app.use(session({
     secret: "8642957315",
