@@ -131,6 +131,7 @@ function ProjectForm({ saveProject, closeModal, teacherId }) {
                 onChange={(e) => setCGPACutoff(e.target.value)}
                 options={[
                   "Select",
+                  { label: "Open for All", value: "open" },
                   { label: "6.0 or More", value: "6.0" },
                   { label: "7.0 or More", value: "7.0" },
                   { label: "8.0 or More", value: "8.0" },
