@@ -7,7 +7,7 @@ const Error = () => {
     <>
       <div style={{textAlign:"center"}}>
         <h1>Error</h1>
-        <button style={{cursor:"pointer"}} onClick={()=>navigate("/login")}>Back To Login Page</button>
+        <button style={{cursor:"pointer"}} onClick={()=>navigate("/")}>Back To Login Page</button>
       </div>
     </>
   )

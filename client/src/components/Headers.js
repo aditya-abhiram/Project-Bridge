@@ -11,6 +11,7 @@ const Headers = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { userId } = useParams(); // Get userId from URL
 
+// eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     console.log("userId test1:", userId); // Check if userId is correctly retrieved
     getUser();
