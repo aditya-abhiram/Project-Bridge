@@ -117,7 +117,7 @@ function ProjectForm({ saveProject, closeModal, teacherId }) {
                 options={[
                   "Select",
                   { label: "Design Project (DOP)", value: "DOP" },
-                  { label: "Label Project (LOP)", value: "LOP" },
+                  { label: "Lab Project (LOP)", value: "LOP" },
                   { label: "Study Project (SOP)", value: "SOP" },
                 ]}
               />
@@ -131,7 +131,7 @@ function ProjectForm({ saveProject, closeModal, teacherId }) {
                 onChange={(e) => setCGPACutoff(e.target.value)}
                 options={[
                   "Select",
-                  { label: "Open for All", value: "open" },
+                  { label: "Open for All", value: "0.0" },
                   { label: "6.0 or More", value: "6.0" },
                   { label: "7.0 or More", value: "7.0" },
                   { label: "8.0 or More", value: "8.0" },

@@ -41,7 +41,7 @@ function EditModal({ projectId, closeModal }) {
     const fetchProjectData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/projectdata/${projectId}`
+          `http://localhost:8000/projects/projectData/${projectId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch project data");
@@ -77,7 +77,7 @@ function EditModal({ projectId, closeModal }) {
     setValidated(false);
     try {
       const response = await fetch(
-        `http://localhost:8000/updateProject/${projectId}`,
+        `http://localhost:8000/projects/updateProject/${projectId}`,
         {
           method: "PUT",
           headers: {
@@ -189,7 +189,7 @@ function EditModal({ projectId, closeModal }) {
                   options={[
                     "Select",
                     { label: "Design Project (DOP)", value: "DOP" },
-                    { label: "Label Project (LOP)", value: "LOP" },
+                    { label: "Lab Project (LOP)", value: "LOP" },
                     { label: "Study Project (SOP)", value: "SOP" },
                   ]}
                 />
@@ -206,7 +206,7 @@ function EditModal({ projectId, closeModal }) {
                   }
                   options={[
                     "Select",
-                    { label: "Open for All", value: "open" },
+                    { label: "Open for All", value: "0.0" },
                     { label: "6.0 or More", value: "6.0" },
                     { label: "7.0 or More", value: "7.0" },
                     { label: "8.0 or More", value: "8.0" },

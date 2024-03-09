@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom'; // Import useParams hook
+import { useParams } from 'react-router-dom'; 
 import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
@@ -11,15 +11,14 @@ const Headers = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { userId } = useParams(); // Get userId from URL
 
-// eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    console.log("userId test1:", userId); // Check if userId is correctly retrieved
     getUser();
-  }, [userId]); // Trigger useEffect when userId changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   const getUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/users/${userId}`); // Fetch user data using userId
+      const response = await axios.get(`http://localhost:8000/users/getUserData/${userId}`); // Fetch user data using userId
       setUserdata(response.data);
     } catch (error) {
       console.log("error", error);

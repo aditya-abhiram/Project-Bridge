@@ -20,7 +20,7 @@ const StudentProfile = () => {
 
   const fetchStudentData = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:8000/students/${userId}`);
+      const response = await axios.get(`http://localhost:8000/students/getData/${userId}`);
       setStudentData(response.data);
       // Populate form data with fetched student data
       setFormData(response.data);
@@ -54,7 +54,7 @@ const StudentProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8000/students/${userId}`, formData);
+      await axios.put(`http://localhost:8000/students/updateData/${userId}`, formData);
       // After successful submission, fetch updated data again
       fetchStudentData(userId);
       // Disable edit mode after saving

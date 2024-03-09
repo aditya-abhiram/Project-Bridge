@@ -26,7 +26,7 @@ function TeacherHome() {
   }, []);
   const fetchProjects = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/projects/${userId}`);
+      const response = await fetch(`http://localhost:8000/projects/fetchProjects/${userId}`);
       const data = await response.json();
       setProjects(data);
     } catch (error) {
@@ -35,10 +35,8 @@ function TeacherHome() {
   };
 
   const saveProject = async (projectData) => {
-    projectData.teacherId = userId;
-
     try {
-      const response = await fetch("http://localhost:8000/saveProject", {
+      const response = await fetch(`http://localhost:8000/projects/saveProject/${userId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,12 +49,12 @@ function TeacherHome() {
     } catch (error) {
       console.error("Error saving project:", error);
     }
-  };
+};
 
   const deleteProject = async (projectId) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/deleteProject/${projectId}`,
+        `http://localhost:8000/projects/deleteProject/${projectId}`,
         {
           method: "DELETE",
         }
