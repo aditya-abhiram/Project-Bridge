@@ -44,10 +44,10 @@ const Headers = () => {
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {userdata?.user_type === 'student' && (
-                <Nav.Link href={`/StudentProfile/${userId}`}>My Profile</Nav.Link>
+                <Nav.Link href={`/students/StudentProfile/${userId}`}>My Profile</Nav.Link>
               )}
               {userdata?.user_type === 'teacher' && (
-                <Nav.Link href={`/TeacherProfile/${userId}`}>My Profile</Nav.Link>
+                <Nav.Link href={`/teachers/TeacherProfile/${userId}`}>My Profile</Nav.Link>
               )}
               <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
             </Dropdown.Menu>

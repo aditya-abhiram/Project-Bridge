@@ -5,20 +5,20 @@ import React from 'react';
 import Header from './components/Headers';
 import StudentHome from './components/student/student_home';
 import TeacherHome from './components/teacher/home/teacher_home';
-import ProjectBank from './components/common/project_bank';
 import StudentProfile from './components/student/student_profile';
 import TeacherProfile from './components/teacher/profile/teacher_profile';
+import ProjectBank from './components/student/student_projectBank';
 import { Route, Routes, useParams } from 'react-router-dom';
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/StudentHome/:userId/*" element={<PageWrapper component={StudentHome} />} />
-      <Route path="/TeacherHome/:userId/*" element={<PageWrapper component={TeacherHome} />} />
-      <Route path="/StudentProfile/:userId/*" element={<PageWrapper component={StudentProfile} />} />
-      <Route path="/TeacherProfile/:userId/*" element={<PageWrapper component={TeacherProfile} />} />
-      <Route path="/project_bank" element={<ProjectBank />} />
+      <Route path="/students/StudentHome/:userId/*" element={<PageWrapper component={StudentHome} />} />
+      <Route path="/teachers/TeacherHome/:userId/*" element={<PageWrapper component={TeacherHome} />} />
+      <Route path="/students/StudentProfile/:userId/*" element={<PageWrapper component={StudentProfile} />} />
+      <Route path="/teachers/TeacherProfile/:userId/*" element={<PageWrapper component={TeacherProfile} />} />
+      <Route path="/students/ProjectBank/:userId/*" element={<PageWrapper component={ProjectBank} />} />
       <Route path="*" element={<Error />} />
     </Routes>
   );

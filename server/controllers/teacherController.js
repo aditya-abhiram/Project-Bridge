@@ -3,8 +3,8 @@ const teacherdb = require("../model/teacherSchema")
 exports.getData = async (req, res) => {
     // Logic for fetching Teacher data
     try {
-        const userId = req.params.userId;
-        const teacher = await teacherdb.findOne({ userId });
+        const teacherId = req.params.userId;
+        const teacher = await teacherdb.findOne({ teacherId });
     
         if (!teacher) {
           res.status(404).json({ error: "Teacher not found" });
@@ -20,11 +20,11 @@ exports.getData = async (req, res) => {
 exports.updateData = async (req, res) => {
     // Logic for updating Teacher data
     try {
-        const userId = req.params.userId;
+        const teacherId = req.params.userId;
         const { name, block, roomNumber, department } = req.body;
     
         const updatedTeacher = await teacherdb.findOneAndUpdate(
-          { userId },
+          { teacherId },
           { name, block, roomNumber, department },
           { new: true }
         );

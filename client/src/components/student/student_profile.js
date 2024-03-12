@@ -11,6 +11,7 @@ const StudentProfile = () => {
     degree: "Single Degree",
     firstDegree: "",
     secondDegree: "",
+    cg: "",
   });
   const [editMode, setEditMode] = useState(false);
 
@@ -155,8 +156,11 @@ const StudentProfile = () => {
             <option value="PHY">Physics (PHY)</option>
             
           </select>
-        </div>
-
+        </div><br/>
+          <div>
+          <label htmlFor="cg">Current CGPA</label><br/>
+          <input type="number" id="cg" name="cg" min="0" step="0.01" value={formData.cg} onChange={handleInputChange} disabled={!editMode} /><br/><br/>
+          </div>
       </form>
     </div>
   );

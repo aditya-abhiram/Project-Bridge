@@ -87,7 +87,7 @@ const TeacherProfile = () => {
           <option value="K">K - Block</option>
         </select><br/><br/>
         <label htmlFor="roomNumber">Room Number</label><br/>
-        <input type="text" pattern="\d*" maxlength="3" id="roomNumber" name="roomNumber"value={formData.roomNumber} onChange={handleInputChange} disabled={!editMode} /> <br/><br/>
+        <input type="text" pattern="\d*" maxLength="3" id="roomNumber" name="roomNumber"value={formData.roomNumber} onChange={handleInputChange} disabled={!editMode} /> <br/><br/>
         <label htmlFor="department">Department</label><br/>
         <select id="department" name="department" value={formData.department} onChange={handleInputChange} disabled={!editMode}> 
           <option value="">Select Department</option>

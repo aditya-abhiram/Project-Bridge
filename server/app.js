@@ -10,6 +10,7 @@ const OAuth2Strategy = require("passport-google-oauth20").Strategy;
 const userdb = require("./model/userSchema");
 const studentdb = require("./model/studentSchema");
 const teacherdb = require("./model/teacherSchema");
+const likesdb = require("./model/likesSchema");
 const clientid = process.env.CLIENT_ID;
 const clientsecret = process.env.CLIENT_SECRET;
 
@@ -138,16 +139,16 @@ app.get(
     // Check if the user already exists in the respective collection
     let userExists = false;
     if (userType === "teacher") {
-      userExists = await teacherdb.exists({ userId });
+      userExists = await teacherdb.exists({ teacherId: userId });
     } else if (userType === "student") {
-      userExists = await studentdb.exists({ userId });
+      userExists = await studentdb.exists({ studentId: userId });
     }
 
     if (!userExists) {
       // Save userId in teachers or students collection based on user_type
       if (userType === "teacher") {
         const teacher = new teacherdb({
-          userId: userId,
+          teacherId: userId,
           name: name,
           block: "",
           roomNumber: "", 
@@ -156,20 +157,27 @@ app.get(
         await teacher.save();
       } else if (userType === "student") {
         const student = new studentdb({
-          userId: userId,
+          studentId: userId,
           name: name,
           idNumber: "", 
           degree: "",
           firstDegree: "",
           secondDegree: "",
+          cg:"",
         });
         await student.save();
+
+        const likes = new likesdb({
+          studentId: userId,
+          likedProjects: [], 
+        });
+        await likes.save();
       }
     }
 
     res.redirect(
       `http://localhost:3000/${
-        userType === "teacher" ? "TeacherHome" : "StudentHome"
+        userType === "teacher" ? "teachers/TeacherHome" : "students/StudentHome"
       }/${userId}`
     );
   }
