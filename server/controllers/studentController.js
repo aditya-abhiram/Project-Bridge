@@ -57,7 +57,7 @@ exports.getProjectsData = async (req, res) => {
     const student = await studentdb.findOne({ studentId: userId });
     if (!student) {
       // Handle the case where student is not found
-      console.error('Student not found');
+      console.error('Student not found part 1');
       res.status(404).json({ message: 'Student not found' });
       return; // Exit the function early
   }
@@ -90,55 +90,49 @@ exports.getProjectsData = async (req, res) => {
 };
 
 exports.getLikedProjects = async(req, res) => {
-  const { studentId, projectId } = req.params;
-  try {
-      const like = await likesdb.findOne({ studentId });
-      if (!like) {
-          return res.status(404).send('Like not found');
-      }
-      const liked = like.likedProjects.includes(projectId);
-      res.status(200).send({ liked });
-  } catch (error) {
-      console.error(error);
-      res.status(500).send('Server Error');
-  }
-}
-exports.saveLikedProjects = async(req, res) => {
-  console.log("backend test1");
-  const { studentId, projectId } = req.body;
+  const { studentId } = req.params;
     try {
-        let like = await likesdb.findOne({ studentId });
-        console.log("backend test2");
-        if (!like) {
-          console.log("backend test3");
-            like = new likesdb({ studentId, likedProjects: [projectId] });
-        } else {
-          console.log("backend test4");
-          console.log("backend test 5, projectId", projectId , studentId);
-            // if (!like.likedProjects.includes(projectId)) {
-            //   console.log("backend test5");
-                like.likedProjects.push(projectId);
+        const student = await likesdb.findOne({ studentId });
+        if (!student) {
+            res.status(404).json({ message: 'Student not found part 2' });
+            return;
         }
-        await like.save();
-        res.status(201).send(like);
+        res.status(200).json(student.likedProjects);
     } catch (error) {
         console.error(error);
-        res.status(500).send('Server Error');
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+exports.saveLikedProjects = async(req, res) => {
+  const { studentId, projectId } = req.params;
+    try {
+        let student = await likesdb.findOne({ studentId });
+        if (!student) {
+            student = new likesdb({ studentId, likedProjects: [{ projectId }] });
+        } else {
+            student.likedProjects.push({ projectId });
+        }
+        await student.save();
+        res.status(200).json({ message: 'Liked project saved successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 }
 
 exports.deleteLikedProjects = async(req, res) => {
   const { studentId, projectId } = req.params;
     try {
-        let like = await likesdb.findOne({ studentId });
-        if (!like) {
-            return res.status(404).send('Like not found');
+        let student = await likesdb.findOne({ studentId });
+        if (!student) {
+            res.status(404).json({ message: 'Student not found' });
+            return;
         }
-        like.likedProjects = like.likedProjects.filter(id => id !== projectId);
-        await like.save();
-        res.status(200).send(like);
+        student.likedProjects = student.likedProjects.filter(project => project.projectId !== projectId);
+        await student.save();
+        res.status(200).json({ message: 'Liked project removed successfully' });
     } catch (error) {
         console.error(error);
-        res.status(500).send('Server Error');
+        res.status(500).json({ message: 'Internal server error' });
     }
 }

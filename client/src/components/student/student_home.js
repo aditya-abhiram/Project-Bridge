@@ -7,6 +7,7 @@ const StudentHome = () => {
     <div style={{textAlign:"center"}}>
         <p>User ID: {userId}</p>
         <h1>Student Home</h1>
+        <a href={`/students/ProjectBank/${userId}`}> Project Bank </a>
       </div>
   )
 }
