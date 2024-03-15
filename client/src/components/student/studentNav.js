@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom'; 
 import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 
-const Headers = () => {
+const StudentNav = ({ userId }) => {
   const [userdata, setUserdata] = useState({});
   const [showDropdown, setShowDropdown] = useState(false);
-  const { userId } = useParams(); // Get userId from URL
 
   useEffect(() => {
     getUser();
@@ -43,12 +41,7 @@ const Headers = () => {
               <img src={userdata?.image} style={{ width: "50px", borderRadius: "50%" }} alt="" />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              {userdata?.user_type === 'student' && (
-                <Nav.Link href={`/students/StudentProfile/${userId}`}>My Profile</Nav.Link>
-              )}
-              {userdata?.user_type === 'teacher' && (
-                <Nav.Link href={`/teachers/TeacherProfile/${userId}`}>My Profile</Nav.Link>
-              )}
+              <Nav.Link href={`/students/StudentProfile/${userId}`}>My Profile</Nav.Link>
               <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -58,4 +51,4 @@ const Headers = () => {
   );
 }
 
-export default Headers;
+export default StudentNav;

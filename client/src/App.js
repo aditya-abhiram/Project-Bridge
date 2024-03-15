@@ -2,7 +2,8 @@ import './App.css';
 import Login from './components/Login';
 import Error from './components/Error';
 import React from 'react';
-import Header from './components/Headers';
+import StudentNav from './components/student/studentNav';
+import TeacherNav from './components/teacher/teacherNav';
 import StudentHome from './components/student/student_home';
 import TeacherHome from './components/teacher/home/teacher_home';
 import StudentProfile from './components/student/student_profile';
@@ -14,21 +15,31 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/students/StudentHome/:userId/*" element={<PageWrapper component={StudentHome} />} />
-      <Route path="/teachers/TeacherHome/:userId/*" element={<PageWrapper component={TeacherHome} />} />
-      <Route path="/students/StudentProfile/:userId/*" element={<PageWrapper component={StudentProfile} />} />
-      <Route path="/teachers/TeacherProfile/:userId/*" element={<PageWrapper component={TeacherProfile} />} />
-      <Route path="/students/ProjectBank/:userId/*" element={<PageWrapper component={ProjectBank} />} />
+      <Route path="/students/StudentHome/:userId/*" element={<StudentPageWrapper component={StudentHome} />} />
+      <Route path="/teachers/TeacherHome/:userId/*" element={<TeacherPageWrapper component={TeacherHome} />} />
+      <Route path="/students/StudentProfile/:userId/*" element={<StudentPageWrapper component={StudentProfile} />} />
+      <Route path="/teachers/TeacherProfile/:userId/*" element={<TeacherPageWrapper component={TeacherProfile} />} />
+      <Route path="/students/ProjectBank/:userId/*" element={<StudentPageWrapper component={ProjectBank} />} />
       <Route path="*" element={<Error />} />
     </Routes>
   );
 }
 
-function PageWrapper({ component: Component }) {
+function StudentPageWrapper({ component: Component }) {
   const { userId } = useParams();
   return (
     <>
-      <Header userId={userId} />
+      <StudentNav userId={userId} />
+      <Component />
+    </>
+  );
+}
+
+function TeacherPageWrapper({ component: Component }) {
+  const { userId } = useParams();
+  return (
+    <>
+      <TeacherNav userId={userId} />
       <Component />
     </>
   );
