@@ -12,6 +12,7 @@ import {
   CCardTitle,
   CCardText,
 } from "@coreui/react";
+import './teacher_home.css';
 
 function TeacherHome() {
   const [visible, setVisible] = useState(false);
@@ -90,6 +91,7 @@ function TeacherHome() {
     <>
       <CButton
         className="mb-3"
+        id="addProjectBtn"
         onClick={() => setVisible(!visible)}
         aria-expanded={visible}
         aria-controls="collapseWidthExample"
@@ -112,9 +114,10 @@ function TeacherHome() {
       <hr></hr>
       <div>
         <h3>Current Projects</h3>
+        <div id="current_projects_div">
         {projects.map((project, index) => (
-          <CCard key={project._id} style={{ width: "18rem" }}>
-            <CCardBody>
+          <CCard key={project._id} id="project_card" >
+            <CCardBody >
               <CCardTitle>{project.project_name}</CCardTitle>
               <CCardText>{project.project_description}</CCardText>
               {project.expanded && (
@@ -134,6 +137,8 @@ function TeacherHome() {
             </CCardBody>
           </CCard>
         ))}
+        </div>
+        
       </div>
       {/* Edit Modal */}
       {editModalVisible && (

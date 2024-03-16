@@ -60,4 +60,22 @@
   ul li button {
     margin-left: 5px;
   }
-  
+
+#addProjectBtn{
+  left: 1%;
+  position: relative;
+  }
+
+.btn{
+  margin: 2%;
+}
+#project_card{
+  width: 18%;
+  margin: 2%;
+}
+
+#current_projects_div{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-around;
+}
