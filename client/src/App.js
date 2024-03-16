@@ -8,7 +8,7 @@ import StudentHome from './components/student/student_home';
 import TeacherHome from './components/teacher/home/teacher_home';
 import StudentProfile from './components/student/student_profile';
 import TeacherProfile from './components/teacher/profile/teacher_profile';
-import ProjectBank from './components/student/student_projectBank';
+import ProjectBank from './components/student/projectBank/student_projectBank';
 import { Route, Routes, useParams } from 'react-router-dom';
 
 function App() {

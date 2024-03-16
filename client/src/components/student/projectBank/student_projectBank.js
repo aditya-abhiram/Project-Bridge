@@ -4,11 +4,14 @@ import { useParams } from 'react-router-dom';
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Typography, Paper, IconButton, Box, Collapse, Button, Checkbox } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import RequestFormModal from './RequestFormModal';
 
 const ProjectBank = () => {
     const { userId } = useParams();
     const [projects, setProjects] = useState([]);
     const [likedProjects, setLikedProjects] = useState([]);
+    const [isRequestFormOpen, setIsRequestFormOpen] = useState(false); 
+    const [selectedProject, setSelectedProject] = useState(null); // Define selectedProject state
 
     useEffect(() => {
         const fetchProjectBankData = async () => {
@@ -52,15 +55,15 @@ const ProjectBank = () => {
 
     const Row = ({ project }) => {
         const [open, setOpen] = useState(false);
-    
         if (!project || !project.project_name) {
             return null; // Return null or some fallback JSX if project is null or undefined, or if project_name is not present
         }
     
         const isLiked = likedProjects.some(liked => liked.projectId === project.project_name);
     
-        const handleRequest = () => {
-            console.log("Request button check");
+        const handleRequest = (projectData) => {
+            setSelectedProject(projectData); // Set selectedProject when request button is clicked
+            setIsRequestFormOpen(true); 
         };
     
         return (
@@ -104,7 +107,7 @@ const ProjectBank = () => {
                                 <Typography>{`Pre-requisites: ${project.pre_requisites.join(', ')}`}</Typography>
                                 <Typography>{`CG Cutoff: ${project.cg_cutoff}`}</Typography>
                                 <Typography>{`CG Eligibility: ${project.cg_eligibility}`}</Typography>
-                                <Button onClick={handleRequest} variant="contained" color="primary">Request</Button>
+                                <Button onClick={() => handleRequest(project)} variant="contained" color="primary">Request</Button>
                             </Box>
                         </Collapse>
                     </TableCell>
@@ -137,12 +140,20 @@ const ProjectBank = () => {
                     </TableHead>
                     <TableBody>
                         {projects.map((project, index) => (
-                            <Row key={index} project={project} />
+                            <Row key={index} project={project} handleRequest={() => setIsRequestFormOpen(true)} />
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+            {isRequestFormOpen && (
+                <RequestFormModal
+                    visible={isRequestFormOpen}
+                    onClose={() => setIsRequestFormOpen(false)}
+                    project={selectedProject} // Pass selectedProject to the modal
+                />
+        )}
         </div>
+        
     );
 };
 
