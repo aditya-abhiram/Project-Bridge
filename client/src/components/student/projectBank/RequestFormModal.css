@@ -1,0 +1,11 @@
+#prerequisites-label{
+    background: white
+}
+.Mui-disabled {
+    -webkit-text-fill-color: #000;
+}
+
+#alert_snackbar{
+    /* background-color: #ddffdd; */
+    border-radius: 25px;
+}

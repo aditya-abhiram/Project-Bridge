@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,  useEffect  } from 'react';
 import {
   CModal,
   CModalHeader,
@@ -6,15 +6,22 @@ import {
   CModalBody,
   CModalFooter,
   CButton,
-  CFormInput,
-  CFormTextarea,
 } from '@coreui/react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
-const RequestFormModal = ({ visible, onClose, project }) => {
+// import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import AlertTitle from '@mui/material/AlertTitle';
+import Alert from './Alert';
+import './RequestFormModal.css'
+
+const RequestFormModal = ({ visible, onClose, project, userId, selectedProject }) => {
+  console.log("ProjectData:", selectedProject);
   const [formData, setFormData] = useState({
     projectName: project.project_name || '',
     projectDescription: project.project_description || '',
@@ -23,7 +30,39 @@ const RequestFormModal = ({ visible, onClose, project }) => {
     selectedPrerequisites: [], // State to store selected prerequisites
   });
 
+  
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [draftDetails, setDraftDetails] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [snackbarTitle, setSnackbarTitle] = useState('');
+  const [alertStyle, setAlertStyle] = useState('')
+  useEffect(() => {
+    // Fetch draft details when component mounts
+    fetchDraftDetails();
+  }, [project]);
+
+  const fetchDraftDetails = async () => {
+    try {
+      // Fetch draft details from the backend
+      const response = await axios.get(`http://localhost:8000/students/getDraft/${userId}/${project.projectId}`);
+      const draft = response.data;
+      // Update form data with draft details if draft exists
+      if (draft) {
+        setFormData({
+          projectName: draft.projectName || '',
+          projectDescription: draft.projectDescription || '',
+          whyWantToDoProject: draft.reason_to_do_project || '',
+          currentCGPA: draft.current_cgpa || '',
+          selectedPrerequisites: draft.pre_requisites_fulfilled || [],
+        });
+        setDraftDetails(draft); // Store draft details in state
+      }
+    } catch (error) {
+      console.error('Error fetching draft details:', error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -58,12 +97,49 @@ const RequestFormModal = ({ visible, onClose, project }) => {
     setShowConfirmation(false);
   };
 
-  const handleSaveDraft = () => {
-    console.log('Save Draft');
+  const handleSaveDraft = async () => {
+    try {
+      await axios.post(`http://localhost:8000/students/saveDraft`, {
+        studentId: userId,
+        projectId: selectedProject.projectId,
+        projectName: selectedProject.project_name,
+        projectDescription: selectedProject.project_description,
+        whyWantToDoProject: formData.whyWantToDoProject,
+        currentCGPA: formData.currentCGPA,
+        selectedPrerequisites: formData.selectedPrerequisites,
+      });
+      setSnackbarSeverity('success');
+      setSnackbarTitle('Success');
+      setSnackbarMessage('Draft saved successfully');
+      setAlertStyle({
+        backgroundColor: '#ddffdd',
+        color: 'green'
+    });
+      console.log("success log");
+    } catch (error) {
+      setSnackbarSeverity('error');
+      setSnackbarTitle('Failure');
+      setSnackbarMessage('Error saving draft');
+      setAlertStyle({
+        backgroundColor: '#ffdddd',
+        color: 'red'
+    });
+      console.error('Error saving draft:', error);
+      console.log("failure log");
+    }
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   
   return (
+    <>
     <CModal
       backdrop="static"
       visible={visible}
@@ -75,34 +151,57 @@ const RequestFormModal = ({ visible, onClose, project }) => {
       </CModalHeader>
       <CModalBody>
         {/* Form fields */}
-        <CFormInput
+        <TextField
+          // labelId="name-label"
           type="text"
           name="projectName"
           value={formData.projectName}
           onChange={handleInputChange}
           placeholder="Project Name"
+          id="outlined-disabled"
+          label="Project Name"
+          defaultValue="Hello World"
+          style={{marginTop:'25px'}}
+          fullWidth
           disabled
         />
-        <CFormTextarea
+        <TextField
           name="projectDescription"
           value={formData.projectDescription}
           onChange={handleInputChange}
           placeholder="Project Description"
+          id="outlined-disabled"
+          label="Project Description"
+          defaultValue="Hello World"
+          style={{marginTop:'25px'}}
+          fullWidth
+          multiline
+          maxRows={4}
           disabled
         />
-        <CFormTextarea
+        <TextField
           name="whyWantToDoProject"
           value={formData.whyWantToDoProject}
           onChange={handleInputChange}
           placeholder="Why do you want to do this project?"
-          id="floatingInput" floatingClassName="mb-3" floatingLabel="Why do you want to do this project?"
+          id="outlined"
+          label="Why do you want to do this project?"
+          style={{marginTop:'25px'}}
+          fullWidth 
+          multiline
+          rows={4}
+          // defaultValue="Hello World"
         />
-        <CFormInput
+        <TextField
           type="number"
           name="currentCGPA"
           value={formData.currentCGPA}
           onChange={handleInputChange}
           placeholder="Current CGPA"
+          id="outlined"
+          label="Current CGPA"
+          style={{marginTop:'25px'}}
+          fullWidth 
           step="0.01"
           min="0"
           max="10"
@@ -157,6 +256,13 @@ const RequestFormModal = ({ visible, onClose, project }) => {
         )}
       </CModalFooter>
     </CModal>
+    <Snackbar id='alert_snackbar' open={snackbarOpen} autoHideDuration={60000} onClose={handleSnackbarClose}  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+      <Alert id='alert_toast' onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }} style={alertStyle}>
+      <AlertTitle>{snackbarTitle}</AlertTitle>
+        {snackbarMessage}
+      </Alert>
+    </Snackbar>
+   </>
   );
 };
 

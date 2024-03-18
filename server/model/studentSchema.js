@@ -8,6 +8,7 @@ const studentSchema = new mongoose.Schema({
     firstDegree: String,
     secondDegree: String,
     cg: String,
+    drafts: Array,  // Ensure drafts is of type Array
 });
 
 const studentdb = mongoose.model("student", studentSchema);

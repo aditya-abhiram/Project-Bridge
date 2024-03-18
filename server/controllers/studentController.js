@@ -70,6 +70,7 @@ exports.getProjectsData = async (req, res) => {
         const cgEligibility = parseFloat(student.cg) >= parseFloat(project.cg_cutoff) ? 'Eligible' : 'Not Eligible';
 
         return {
+            projectId: project._id,
             project_name: project.project_name,
             project_description: project.project_description,
             project_type: project.project_type,
@@ -136,3 +137,72 @@ exports.deleteLikedProjects = async(req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
+// POST /saveDraft endpoint
+exports.saveDrafts = async (req, res) => {
+  const { studentId, projectId, projectName, projectDescription, whyWantToDoProject, currentCGPA, selectedPrerequisites } = req.body;
+  
+  try {
+    // Find the student document
+    const student = await studentdb.findOne({ studentId });
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+  
+    // Check if a draft with the same projectId exists for the student
+    const existingDraftIndex = student.drafts.findIndex((draft) => draft.projectId === projectId);
+  
+    if (existingDraftIndex !== -1) {
+      // Update the existing draft
+      student.drafts[existingDraftIndex] = {
+        projectId,
+        projectName,
+        projectDescription,
+        reason_to_do_project: whyWantToDoProject,
+        current_cgpa: currentCGPA,
+        pre_requisites_fulfilled: selectedPrerequisites,
+      };
+    } else {
+      // Save the draft
+      const draft = {
+        projectId,
+        projectName,
+        projectDescription,
+        reason_to_do_project: whyWantToDoProject,
+        current_cgpa: currentCGPA,
+        pre_requisites_fulfilled: selectedPrerequisites,
+      };
+      
+      // Add the draft to the drafts array
+      student.drafts.push(draft);
+    }
+  
+    // Save the student document
+    await student.save();
+  
+    res.status(200).json({ message: 'Draft saved successfully' });
+  } catch (error) {
+    console.error('Error saving draft:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+exports.getDraftDetails = async (req, res) => {
+  const { studentId, projectId } = req.params;
+
+  try {
+    const student = await studentdb.findOne({ studentId });
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    // Find the draft details for the specified project
+    const draft = student.drafts.find((draft) => draft.projectId === projectId);
+
+    res.status(200).json(draft);
+  } catch (error) {
+    console.error('Error fetching draft details:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

@@ -9,4 +9,6 @@ router.get('/projectBank/:userId',studentController.getProjectsData);
 router.get('/getLiked/:studentId', studentController.getLikedProjects);
 router.post('/saveLiked/:studentId/:projectId', studentController.saveLikedProjects);
 router.delete('/removeLiked/:studentId/:projectId', studentController.deleteLikedProjects);
+router.post('/saveDraft', studentController.saveDrafts);
+router.get('/getDraft/:studentId/:projectId', studentController.getDraftDetails);
 module.exports = router;

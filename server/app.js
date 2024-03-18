@@ -164,6 +164,7 @@ app.get(
           firstDegree: "",
           secondDegree: "",
           cg:"",
+          drafts: [],
         });
         await student.save();
         

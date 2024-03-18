@@ -12,6 +12,7 @@ const ProjectBank = () => {
     const [likedProjects, setLikedProjects] = useState([]);
     const [isRequestFormOpen, setIsRequestFormOpen] = useState(false); 
     const [selectedProject, setSelectedProject] = useState(null); // Define selectedProject state
+    const [draftDetails, setDraftDetails] = useState(null);
 
     useEffect(() => {
         const fetchProjectBankData = async () => {
@@ -65,6 +66,7 @@ const ProjectBank = () => {
             setSelectedProject(projectData); // Set selectedProject when request button is clicked
             setIsRequestFormOpen(true); 
         };
+        
     
         return (
             <>
@@ -147,10 +149,13 @@ const ProjectBank = () => {
             </TableContainer>
             {isRequestFormOpen && (
                 <RequestFormModal
-                    visible={isRequestFormOpen}
-                    onClose={() => setIsRequestFormOpen(false)}
-                    project={selectedProject} // Pass selectedProject to the modal
-                />
+          visible={isRequestFormOpen}
+          onClose={() => setIsRequestFormOpen(false)}
+          project={selectedProject}
+          userId={userId}
+          selectedProject={selectedProject}
+          draftDetails={draftDetails} // Pass draftDetails to the modal
+        />
         )}
         </div>
         
