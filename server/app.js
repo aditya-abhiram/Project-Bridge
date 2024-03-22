@@ -28,12 +28,13 @@ const projectRoutes = require("./routes/projectRoutes");
 const userRoutes = require("./routes/userRoutes");
 const teacherRoutes = require("./routes/teacherRoutes");
 const studentRoutes = require("./routes/studentRoutes");
+const requestRoutes = require("./routes/requestRoutes");
 
 app.use("/projects", projectRoutes);
 app.use("/users", userRoutes);
 app.use("/teachers", teacherRoutes);
 app.use("/students", studentRoutes);
-
+app.use("/requests", requestRoutes);
 
 app.use(
   session({

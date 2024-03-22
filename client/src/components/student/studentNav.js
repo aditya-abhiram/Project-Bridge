@@ -4,6 +4,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import './studentNav.css';
 
 const StudentNav = ({ userId }) => {
   const [userdata, setUserdata] = useState({});
@@ -34,7 +35,7 @@ const StudentNav = ({ userId }) => {
   return (
     <>
       <Navbar className="bg-body-tertiary mb-3">
-        <Container fluid>
+        <Container fluid id="main">
           <Navbar.Brand href="#">Hello {userdata?.displayName} ! </Navbar.Brand>
           <Dropdown show={showDropdown} onToggle={toggleDropdown}>
             <Dropdown.Toggle variant="light" id="dropdown-basic">

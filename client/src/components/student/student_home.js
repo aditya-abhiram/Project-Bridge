@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router-dom';
-
+import './student_home.css'
 const StudentHome = () => {
   const { userId } = useParams();
   return (

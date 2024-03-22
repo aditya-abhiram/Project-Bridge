@@ -9,3 +9,17 @@
     /* background-color: #ddffdd; */
     border-radius: 25px;
 }
+
+ul{
+    margin-top: 5% !important;
+}
+
+.Mui-selected{
+    background-color: rgba(13, 110, 253, .25) !important;
+    /* border-radius: 25px !important; */
+    margin: 2% !important;
+}
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
+    background-color: rgba(106, 120, 141, 0.25) !important;
+}
