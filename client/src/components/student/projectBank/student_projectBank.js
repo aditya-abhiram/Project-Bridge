@@ -5,7 +5,8 @@ import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Typog
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RequestFormModal from './RequestFormModal';
-
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 const ProjectBank = () => {
     const { userId } = useParams();
     const [projects, setProjects] = useState([]);
@@ -13,22 +14,22 @@ const ProjectBank = () => {
     const [isRequestFormOpen, setIsRequestFormOpen] = useState(false); 
     const [selectedProject, setSelectedProject] = useState(null); // Define selectedProject state
     const [draftDetails, setDraftDetails] = useState(null);
-
+    const [sentRequests, setSentRequests] = useState([]);
     useEffect(() => {
         const fetchProjectBankData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8000/students/projectBank/${userId}`);
-                console.log('Project Bank Data:', response.data); // Log the response data
+                console.log('Project Bank Data:', response.data);
                 setProjects(response.data);
             } catch (error) {
                 console.error(error);
             }
         };
-    
+
         const fetchLikedProjects = async () => {
             try {
                 const response = await axios.get(`http://localhost:8000/students/getLiked/${userId}`);
-                console.log('Liked Projects Data:', response.data); // Log the response data
+                console.log('Liked Projects Data:', response.data);
                 setLikedProjects(response.data);
             } catch (error) {
                 console.error(error);
@@ -37,9 +38,27 @@ const ProjectBank = () => {
     
         fetchProjectBankData();
         fetchLikedProjects();
-    }, [userId]);
+    }, [userId]); 
     
-
+    useEffect(() => {
+        if (projects.length > 0) {
+            const fetchSentRequests = async () => {
+                try {
+                    const requests = {};
+                    for (const project of projects) {
+                        const response = await axios.get(`http://localhost:8000/requests/sentRequests/${project.projectId}/${userId}`);
+                        requests[project.projectId] = response.data ? true : false;
+                    }
+                    setSentRequests(requests);
+                } catch (error) {
+                    console.error("Error fetching sent requests:", error);
+                }
+            };
+    
+            fetchSentRequests();
+        }
+    }, [projects, userId]);
+    
     const handleLike = async (projectId, isChecked) => {
         try {
             if (isChecked) {
@@ -59,9 +78,10 @@ const ProjectBank = () => {
         if (!project || !project.project_name) {
             return null; // Return null or some fallback JSX if project is null or undefined, or if project_name is not present
         }
-    
         const isLiked = likedProjects.some(liked => liked.projectId === project.project_name);
-    
+
+        const isRequestSent = sentRequests[project.projectId];
+
         const handleRequest = (projectData) => {
             setSelectedProject(projectData); // Set selectedProject when request button is clicked
             setIsRequestFormOpen(true); 
@@ -109,7 +129,15 @@ const ProjectBank = () => {
                                 <Typography>{`Pre-requisites: ${project.pre_requisites.join(', ')}`}</Typography>
                                 <Typography>{`CG Cutoff: ${project.cg_cutoff}`}</Typography>
                                 <Typography>{`CG Eligibility: ${project.cg_eligibility}`}</Typography>
-                                <Button onClick={() => handleRequest(project)} variant="contained" color="primary">Request</Button>
+                                {/* <Button onClick={() => handleRequest(project)} variant="contained" color="primary">Request</Button> */}
+                                {/* Render other project details here */}
+                                <Stack direction="row" spacing={1}>
+                                    {isRequestSent ? (
+                                        <Chip label="Request Already Sent" color="success" variant="outlined" />
+                                    ) : (
+                                        <Button onClick={() => handleRequest(project)} variant="contained" color="primary">Request</Button>
+                                    )}
+                                </Stack>
                             </Box>
                         </Collapse>
                     </TableCell>
@@ -155,6 +183,8 @@ const ProjectBank = () => {
           userId={userId}
           selectedProject={selectedProject}
           draftDetails={draftDetails} // Pass draftDetails to the modal
+          setSentRequests={setSentRequests} // Pass setSentRequests function as prop
+          sentRequests={sentRequests} // Pass sentRequests state as prop
         />
         )}
         </div>

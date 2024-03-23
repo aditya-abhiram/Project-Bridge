@@ -11,6 +11,7 @@ const requestSchema = new mongoose.Schema({
       pre_requisites_fullfilled: { type: [String], required: true },
     },
   ],
+  status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
 });
 
 // Create model from schema

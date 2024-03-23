@@ -28,6 +28,8 @@ const RequestFormModal = ({
   project,
   userId,
   selectedProject,
+  setSentRequests, // Receive setSentRequests as prop
+  sentRequests, // Receive sentRequests as prop
 }) => {
   // console.log("ProjectData:", selectedProject);
   const [formData, setFormData] = useState({
@@ -46,7 +48,7 @@ const RequestFormModal = ({
   const [snackbarTitle, setSnackbarTitle] = useState("");
   const [alertStyle, setAlertStyle] = useState("");
   const [validated, setValidated] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     // Fetch draft details when component mounts
     fetchDraftDetails();
@@ -108,6 +110,7 @@ const RequestFormModal = ({
   
   const handleConfirmSendRequest = async () => {
     try {
+      setIsLoading(true);
       const requestData = {
         studentId: userId,
         reason_to_do_project: formData.whyWantToDoProject,
@@ -119,7 +122,11 @@ const RequestFormModal = ({
         requestData
       );
   
-      setShowConfirmation(false);
+      // Update the sentRequests state after sending the request
+      setSentRequests({
+        ...sentRequests,
+        [selectedProject.projectId]: true,
+      });
   
       setSnackbarSeverity("success");
       setSnackbarTitle("Success");
@@ -131,8 +138,8 @@ const RequestFormModal = ({
       setSnackbarOpen(true);
       setTimeout(() => {
         onClose(); // Close modal after 5 seconds
+        setIsLoading(false);
       }, 3000);
-      
     } catch (error) {
       setSnackbarSeverity("error");
       setSnackbarTitle("Failure");
@@ -143,7 +150,6 @@ const RequestFormModal = ({
         color: "red",
       });
       setSnackbarOpen(true); // Open Snackbar for error case
-
     }
   };
   
@@ -242,6 +248,7 @@ const RequestFormModal = ({
             <CFormTextarea
               name="whyWantToDoProject"
               value={formData.whyWantToDoProject}
+              disabled={isLoading}
               onChange={handleInputChange}
               placeholder="Why do you want to do this project?"
               id="outlined"
@@ -258,6 +265,7 @@ const RequestFormModal = ({
               <Select
                 labelId="prerequisites-label"
                 id="prerequisites-select"
+                disabled={isLoading}
                 multiple
                 value={formData.selectedPrerequisites}
                 onChange={handlePrerequisitesChange}
@@ -284,22 +292,22 @@ const RequestFormModal = ({
           <CModalFooter>
             {!showConfirmation ? (
               <React.Fragment>
-                <CButton color="secondary" onClick={onClose}>
+                <CButton color="secondary" onClick={onClose} disabled={isLoading}>
                   Close
                 </CButton>
-                <CButton color="primary" onClick={handleSaveDraft}>
+                <CButton color="primary" onClick={handleSaveDraft} disabled={isLoading}>
                   Save Draft
                 </CButton>
-                <CButton color="warning" onClick={handleSubmit}>
+                <CButton color="warning" onClick={handleSubmit} disabled={isLoading}>
                   Send Request
                 </CButton>
               </React.Fragment>
             ) : (
               <React.Fragment>
-                <CButton color="secondary" onClick={handleBack}>
+                <CButton color="secondary" onClick={handleBack} disabled={isLoading}>
                   Back
                 </CButton>
-                <CButton color="success" onClick={handleConfirmSendRequest}>
+                <CButton color="success" onClick={handleConfirmSendRequest} disabled={isLoading}>
                   Confirm Send Request
                 </CButton>
               </React.Fragment>
