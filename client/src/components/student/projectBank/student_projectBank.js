@@ -15,6 +15,7 @@ const ProjectBank = () => {
     const [selectedProject, setSelectedProject] = useState(null); // Define selectedProject state
     const [draftDetails, setDraftDetails] = useState(null);
     const [sentRequests, setSentRequests] = useState([]);
+    const [projectStatuses, setProjectStatuses] = useState({});
     useEffect(() => {
         const fetchProjectBankData = async () => {
             try {
@@ -36,10 +37,34 @@ const ProjectBank = () => {
             }
         };
     
+
         fetchProjectBankData();
         fetchLikedProjects();
+        // fetchProjectStatuses();
     }, [userId]); 
     
+   useEffect(() => {
+        const fetchProjectStatuses = async () => {
+            try {
+                const requests = projects.map(project => axios.get(`http://localhost:8000/students/getProjectStatus/${userId}/${project.projectId}`));
+                const responses = await Promise.all(requests);
+                const statuses = responses.reduce((acc, response, index) => {
+                    const project = projects[index];
+                    acc[project.projectId] = response.data.projectStatus;
+                    return acc;
+                }, {});
+                setProjectStatuses(statuses);
+            } catch (error) {
+                console.error("Error fetching project statuses:", error);
+            }
+        };
+    
+        if (projects.length > 0) {
+            fetchProjectStatuses();
+        }
+    }, [projects, userId]); 
+    
+
     useEffect(() => {
         if (projects.length > 0) {
             const fetchSentRequests = async () => {
@@ -72,20 +97,31 @@ const ProjectBank = () => {
             console.error(error);
         }
     };
-
-    const Row = ({ project }) => {
+    const updateProjectStatus = (projectId, status) => {
+        setProjectStatuses(prevStatuses => ({
+            ...prevStatuses,
+            [projectId]: status
+        }));
+    };
+    
+    const Row = ({ project , projectStatuses }) => {
         const [open, setOpen] = useState(false);
         if (!project || !project.project_name) {
             return null; // Return null or some fallback JSX if project is null or undefined, or if project_name is not present
         }
         const isLiked = likedProjects.some(liked => liked.projectId === project.project_name);
-
+    
         const isRequestSent = sentRequests[project.projectId];
 
+        const projectStatus = projectStatuses[project.projectId];
+
+        // This line is causing the error
+    
         const handleRequest = (projectData) => {
             setSelectedProject(projectData); // Set selectedProject when request button is clicked
             setIsRequestFormOpen(true); 
         };
+        
         
     
         return (
@@ -111,6 +147,7 @@ const ProjectBank = () => {
                     <TableCell>{project.pre_requisites.join(', ')}</TableCell>
                     <TableCell>{project.cg_cutoff}</TableCell>
                     <TableCell>{project.cg_eligibility}</TableCell>
+                    <TableCell>{projectStatus}</TableCell>
                     <TableCell>
                         <Checkbox
                             checked={isLiked}
@@ -165,27 +202,30 @@ const ProjectBank = () => {
                             <TableCell>Pre-requisites</TableCell>
                             <TableCell>CG Cutoff</TableCell>
                             <TableCell>CG Eligibility</TableCell>
+                            <TableCell>Project Status</TableCell>
                             <TableCell>Like</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {projects.map((project, index) => (
-                            <Row key={index} project={project} handleRequest={() => setIsRequestFormOpen(true)} />
+                            <Row key={index} project={project} projectStatuses={projectStatuses} updateProjectStatus={updateProjectStatus} handleRequest={() => setIsRequestFormOpen(true)} />
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
             {isRequestFormOpen && (
-                <RequestFormModal
-          visible={isRequestFormOpen}
-          onClose={() => setIsRequestFormOpen(false)}
-          project={selectedProject}
-          userId={userId}
-          selectedProject={selectedProject}
-          draftDetails={draftDetails} // Pass draftDetails to the modal
-          setSentRequests={setSentRequests} // Pass setSentRequests function as prop
-          sentRequests={sentRequests} // Pass sentRequests state as prop
-        />
+               <RequestFormModal
+               visible={isRequestFormOpen}
+               onClose={() => setIsRequestFormOpen(false)}
+               project={selectedProject}
+               userId={userId}
+               selectedProject={selectedProject} // Pass selectedProject to RequestFormModal
+               draftDetails={draftDetails} 
+               setSentRequests={setSentRequests} 
+               sentRequests={sentRequests} 
+               setProjectStatuses={setProjectStatuses}
+               projectStatuses={projectStatuses}
+           />           
         )}
         </div>
         

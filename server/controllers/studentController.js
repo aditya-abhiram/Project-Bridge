@@ -1,6 +1,7 @@
 const studentdb = require("../model/studentSchema");
 const teacherdb = require("../model/teacherSchema");
 const projectdb = require("../model/projectSchema");
+const requestdb = require( "../model/requestSchema");
 const likesdb = require("../model/likesSchema");
 
 exports.getData = async (req, res) => {
@@ -140,7 +141,9 @@ exports.deleteLikedProjects = async(req, res) => {
 
 // POST /saveDraft endpoint
 exports.saveDrafts = async (req, res) => {
-  const { studentId, projectId, projectName, projectDescription, whyWantToDoProject, currentCGPA, selectedPrerequisites } = req.body;
+  const { studentId, projectId } = req.params;
+
+  const { projectName, projectDescription, whyWantToDoProject,selectedPrerequisites } = req.body;
   
   try {
     // Find the student document
@@ -159,7 +162,6 @@ exports.saveDrafts = async (req, res) => {
         projectName,
         projectDescription,
         reason_to_do_project: whyWantToDoProject,
-        current_cgpa: currentCGPA,
         pre_requisites_fulfilled: selectedPrerequisites,
       };
     } else {
@@ -169,7 +171,6 @@ exports.saveDrafts = async (req, res) => {
         projectName,
         projectDescription,
         reason_to_do_project: whyWantToDoProject,
-        current_cgpa: currentCGPA,
         pre_requisites_fulfilled: selectedPrerequisites,
       };
       
@@ -204,5 +205,69 @@ exports.getDraftDetails = async (req, res) => {
   } catch (error) {
     console.error('Error fetching draft details:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+exports.deleteDraft = async (req, res) => {
+  try {
+    const { studentId, projectId } = req.params;
+
+    // Find the student by studentId
+    const student = await studentdb.findOne({ studentId });
+
+    // If student is not found, return an error response
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    // Find the index of the draft with the specified projectId
+    const draftIndex = student.drafts.findIndex(draft => draft.projectId === projectId);
+
+    // If draft is not found, return an error response
+    if (draftIndex === -1) {
+      return res.status(404).json({ message: 'Draft not found' });
+    }
+
+    // Remove the draft from the drafts array
+    student.drafts.splice(draftIndex, 1);
+
+    // Save the updated student document
+    await student.save();
+
+    // Return a success response
+    return res.status(200).json({ message: 'Draft deleted successfully' });
+  } catch (error) {
+    // Handle errors
+    console.error('Error deleting draft:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+
+};
+
+exports.getProjectStatus = async (req, res) => {
+  try {
+    const { studentId, projectId } = req.params;
+
+    // Search for the student's draft in studentdb
+    const student = await studentdb.findOne({ studentId });
+    const draft = student.drafts.find((draft) => draft.projectId === projectId);
+
+    if (draft) {
+      // If a draft is found, set project status to "Request Drafted"
+      return res.status(200).json({ projectStatus: "Request Drafted" });
+    }
+
+    // If no draft is found, search for the sent request in requestdb
+    const request = await requestdb.findOne({ projectId });
+    if (request && request.requests.some((req) => req.studentId === studentId)) {
+      // If a request is found, set project status to "Request Sent"
+      return res.status(200).json({ projectStatus: "Request Sent" });
+    }
+
+    // If neither draft nor request is found, set project status to "No Draft/Request"
+    return res.status(200).json({ projectStatus: "No Draft/Request" });
+  } catch (error) {
+    console.error("Error fetching project status:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };

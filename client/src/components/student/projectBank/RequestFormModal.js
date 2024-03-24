@@ -30,13 +30,14 @@ const RequestFormModal = ({
   selectedProject,
   setSentRequests, // Receive setSentRequests as prop
   sentRequests, // Receive sentRequests as prop
+  setProjectStatuses, 
+  projectStatuses
 }) => {
   // console.log("ProjectData:", selectedProject);
   const [formData, setFormData] = useState({
     projectName: project.project_name || "",
     projectDescription: project.project_description || "",
     whyWantToDoProject: "",
-    currentCGPA: "",
     selectedPrerequisites: [], // State to store selected prerequisites
   });
 
@@ -49,6 +50,8 @@ const RequestFormModal = ({
   const [alertStyle, setAlertStyle] = useState("");
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  // const [projectStatuses, setProjectStatuses] = useState(false);
+
   useEffect(() => {
     // Fetch draft details when component mounts
     fetchDraftDetails();
@@ -68,7 +71,6 @@ const RequestFormModal = ({
           projectName: draft.projectName || "",
           projectDescription: draft.projectDescription || "",
           whyWantToDoProject: draft.reason_to_do_project || "",
-          currentCGPA: draft.current_cgpa || "",
           selectedPrerequisites: draft.pre_requisites_fulfilled || [],
         });
         setDraftDetails(draft); // Store draft details in state
@@ -117,6 +119,7 @@ const RequestFormModal = ({
         pre_requisites_fullfilled: formData.selectedPrerequisites,
       };
   
+      // Send the request to store the request data
       await axios.post(
         `http://localhost:8000/requests/storeRequest/${selectedProject.projectId}/${userId}`,
         requestData
@@ -127,7 +130,16 @@ const RequestFormModal = ({
         ...sentRequests,
         [selectedProject.projectId]: true,
       });
+      
+      setProjectStatuses({
+        ...projectStatuses,
+        [selectedProject.projectId]: "Request Sent",
+    });
+
+      // Call the API to delete the draft
+      await axios.delete(`http://localhost:8000/students/deleteDraft/${userId}/${selectedProject.projectId}`);
   
+      // Show success message
       setSnackbarSeverity("success");
       setSnackbarTitle("Success");
       setSnackbarMessage("Request sent successfully");
@@ -136,11 +148,14 @@ const RequestFormModal = ({
         color: "green",
       });
       setSnackbarOpen(true);
+  
+      // Close modal after 5 seconds
       setTimeout(() => {
-        onClose(); // Close modal after 5 seconds
+        onClose();
         setIsLoading(false);
       }, 3000);
     } catch (error) {
+      // Handle error
       setSnackbarSeverity("error");
       setSnackbarTitle("Failure");
       setSnackbarMessage("Error sending request");
@@ -155,6 +170,7 @@ const RequestFormModal = ({
   
   
   
+  
 
   const handleBack = () => {
     // Hide confirmation message
@@ -163,14 +179,19 @@ const RequestFormModal = ({
 
   const handleSaveDraft = async () => {
     try {
-      await axios.post(`http://localhost:8000/students/saveDraft`, {
-        studentId: userId,
-        projectId: selectedProject.projectId,
+      await axios.post(`http://localhost:8000/students/saveDraft/${userId}/${selectedProject.projectId}`, {
+        // studentId: userId,
+        // projectId: selectedProject.projectId,
         projectName: selectedProject.project_name,
         projectDescription: selectedProject.project_description,
         whyWantToDoProject: formData.whyWantToDoProject,
-        currentCGPA: formData.currentCGPA,
         selectedPrerequisites: formData.selectedPrerequisites,
+      });
+
+      // Update the projectStatuses state after saving the draft
+      setProjectStatuses({
+          ...projectStatuses,
+          [selectedProject.projectId]: "Request Drafted",
       });
       setSnackbarSeverity("success");
       setSnackbarTitle("Success");
