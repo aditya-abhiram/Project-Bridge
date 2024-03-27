@@ -17,7 +17,7 @@ import {
   CBadge,
   CCloseButton,
 } from "@coreui/react";
-
+import './edit_modal.css'
 const badge_styling = {
   "--bs-badge-font-size": "0.9em",
   "--bs-badge-font-weight": "500",

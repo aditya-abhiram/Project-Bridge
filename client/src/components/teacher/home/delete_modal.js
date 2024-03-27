@@ -1,13 +1,14 @@
 // delete_modal.js
 import React, { useState } from "react";
 import {
-  CButton,
   CModal,
   CModalHeader,
   CModalTitle,
   CModalBody,
   CModalFooter,
 } from "@coreui/react";
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function DeleteModal({ projectId, deleteProject }) {
   const [visible, setVisible] = useState(false);
@@ -23,7 +24,7 @@ function DeleteModal({ projectId, deleteProject }) {
 
   return (
     <>
-      <CButton onClick={() => setVisible(!visible)}>Delete</CButton>
+      <Button onClick={() => setVisible(!visible)} variant="outlined" startIcon={<DeleteIcon />}>Delete</Button>
       <CModal
         backdrop="static"
         visible={visible}
@@ -37,12 +38,12 @@ function DeleteModal({ projectId, deleteProject }) {
           Please confirm to delete the project.
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={() => setVisible(false)}>
+          <Button color="secondary" variant="outlined" onClick={() => setVisible(false)}>
             CANCEL
-          </CButton>
-          <CButton color="primary" onClick={handleDeleteProject}>
+          </Button>
+          <Button color="primary" onClick={handleDeleteProject} variant="outlined" startIcon={<DeleteIcon />}>
             CONFIRM DELETE
-          </CButton>
+          </Button>
         </CModalFooter>
       </CModal>
     </>

@@ -9,10 +9,18 @@ const Login = () => {
 
   return (
     <div className="login-page">
-      <h1 style={{ textAlign: "center" }}>Login</h1>
+      
       <div className='form'>
-        <button className='login-with-google-btn' onClick={() => handleGoogleLogin('teacher')}>Login as Teacher</button>
-        <button className='login-with-google-btn' onClick={() => handleGoogleLogin('student')}>Login as Student</button>
+        <div className='child'>
+          <div className='Title'>
+          <h1 style={{ textAlign: "center" }}>Welcome to Project Bridge</h1>
+          </div>
+        </div>
+        <div className='child'>
+          <h1 style={{ textAlign: "center" }}>Login</h1>
+          <button className='login-with-google-btn' onClick={() => handleGoogleLogin('teacher')}>Login as Teacher</button>
+          <button className='login-with-google-btn' onClick={() => handleGoogleLogin('student')}>Login as Student</button>
+        </div>
       </div>
     </div>
   );

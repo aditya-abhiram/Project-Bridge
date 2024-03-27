@@ -2,6 +2,7 @@ import './App.css';
 import Login from './components/Login';
 import Error from './components/Error';
 import React from 'react';
+import "@fontsource/montserrat";
 import StudentNav from './components/student/studentNav';
 import TeacherNav from './components/teacher/teacherNav';
 import StudentHome from './components/student/student_home';

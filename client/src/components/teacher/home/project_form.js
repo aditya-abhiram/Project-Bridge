@@ -14,6 +14,9 @@ import {
   CForm,
 } from "@coreui/react";
 import "./project_form.css";
+import '@coreui/coreui/dist/css/coreui.min.css'
+// import { CFormFloating } from '@coreui/react'
+import Button from '@mui/material/Button';
 
 function ProjectForm({ saveProject, closeModal, teacherId }) {
   const [projectName, setProjectName] = useState("");
@@ -152,9 +155,10 @@ function ProjectForm({ saveProject, closeModal, teacherId }) {
             onChange={(e) => setProjectDomain(e.target.value)}
           />
           <br></br>
-          <CInputGroup className="mb-3">
+          <CInputGroup className="mb-3" id="pre_req_grp">
             <CFormInput
               type="text"
+              id="pre_req_input"
               value={newPrerequisite}
               onChange={(e) => setNewPrerequisite(e.target.value)}
               floatingLabel="Pre-requisites (if any)"
@@ -173,9 +177,9 @@ function ProjectForm({ saveProject, closeModal, teacherId }) {
               Add New
             </CButton>
           </CInputGroup>
-          <ul>
+          <ul id="pre_req_list">
             {prerequisites.map((item, index) => (
-              <CBadge key={index} shape="rounded-pill" style={badge_styling}>
+              <CBadge key={index} shape="rounded-pill" style={badge_styling} id="pre_req_badge">
                 {item}
                 <CCloseButton
                   type="button"
@@ -194,14 +198,14 @@ function ProjectForm({ saveProject, closeModal, teacherId }) {
             <CCol></CCol>
             <CCol></CCol>
             <CCol>
-              <CButton onClick={closeModal} color="secondary">
+              <Button onClick={closeModal} variant="outlined" color="secondary">
                 Cancel
-              </CButton>
+              </Button>
             </CCol>
             <CCol>
-              <CButton type="submit" color="success">
+              <Button type="submit" variant="outlined" color="success">
                 Create
-              </CButton>
+              </Button>
             </CCol>
           </CRow>
         </CContainer>

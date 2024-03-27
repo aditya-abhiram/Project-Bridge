@@ -2,6 +2,12 @@
     text-align: center;
   }
   
+#body{
+  width: 90%;
+  left: 5%;
+  position: relative;
+  border: 1px #888;
+}
   .modal {
     display: block;
     position: fixed;
@@ -69,13 +75,42 @@
 .btn{
   margin: 2%;
 }
+button{
+  margin: 2% !important;
+}
 #project_card{
-  width: 18%;
+  width: 25%;
   margin: 2%;
+  background-color: rgba(31, 38, 46, 0.1);
+  /* opacity: 1; */
+  backdrop-filter: blur(37px);
+  color: white;
+  /* border: white; */
+  border-radius: 18px;
+  padding: 1%;
+  border-color: rgba(59, 74, 89, 0.2);
 }
 
 #current_projects_div{
   display: flex;
   align-items: baseline;
-  justify-content: space-around;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+button:hover {
+  background-color: rgb(25 118 210 / 9%) !important;
+}
+
+#project_modal{
+ width: 70%;
+ left: 15%;
+  background-color: rgba(31, 38, 46, 0.1);
+  /* opacity: 1; */
+  backdrop-filter: blur(37px);
+  color: white;
+  /* border: white; */
+  border-radius: 18px;
+  padding: 1%;
+  border-color: rgba(59, 74, 89, 0.2);
 }

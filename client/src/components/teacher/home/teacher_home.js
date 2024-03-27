@@ -5,13 +5,14 @@ import EditModal from "./edit_modal";
 import DeleteModal from "./delete_modal"; // Import the DeleteModal component
 import { useParams } from "react-router-dom";
 import {
-  CButton,
   CCollapse,
   CCard,
   CCardBody,
   CCardTitle,
   CCardText,
 } from "@coreui/react";
+import Button from '@mui/material/Button';
+
 import './teacher_home.css';
 
 function TeacherHome() {
@@ -89,18 +90,20 @@ function TeacherHome() {
 
   return (
     <>
-      <CButton
+    <div id="body">
+      <Button
         className="mb-3"
         id="addProjectBtn"
         onClick={() => setVisible(!visible)}
         aria-expanded={visible}
         aria-controls="collapseWidthExample"
+        variant="outlined"
       >
         Add Project
-      </CButton>
+      </Button>
       <div>
         <CCollapse id="collapseWidthExample" visible={visible}>
-          <CCard style={{ width: "70%", left: "14%" }}>
+          <CCard id="project_modal">
             <CCardBody>
               <ProjectForm
                 saveProject={saveProject}
@@ -116,20 +119,27 @@ function TeacherHome() {
         <h3>Current Projects</h3>
         <div id="current_projects_div">
         {projects.map((project, index) => (
-          <CCard key={project._id} id="project_card" >
+          <CCard key={project._id} id="project_card">
             <CCardBody >
               <CCardTitle>{project.project_name}</CCardTitle>
               <CCardText>{project.project_description}</CCardText>
               {project.expanded && (
-                <CCardText>CG Cutoff: {project.cg_cutoff}</CCardText>
+                <>
+                  <CCardText><b>Type:</b>    {project.project_type}</CCardText>
+                  <CCardText><b>CG Cutoff:</b>    {project.cg_cutoff}</CCardText>
+                  <CCardText><b>Domain:</b>    {project.project_domain}</CCardText>
+                  <CCardText><b>Pre-Requisites:</b>    {project.pre_requisites.join(', ')}</CCardText>
+                </>
+                
               )}
-              <CButton
+              <Button
                 id="expand_collapse"
                 onClick={() => toggleExpandCollapse(index)}
+                variant="outlined"
               >
                 {project.expanded ? "Collapse" : "Expand"}
-              </CButton>
-              <CButton onClick={() => openEditModal(project._id)}>Edit</CButton>
+              </Button>
+              <Button onClick={() => openEditModal(project._id)} variant="outlined">Edit</Button>
               <DeleteModal
                 projectId={project._id}
                 deleteProject={deleteProject}
@@ -144,7 +154,9 @@ function TeacherHome() {
       {editModalVisible && (
         <EditModal projectId={selectedProjectId} closeModal={closeEditModal} />
       )}
+    </div>
     </>
+
   );
 }
 
