@@ -8,7 +8,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Avatar from '@mui/material/Avatar';
@@ -17,7 +17,7 @@ import './teacherNav.css'
 
 const TeacherNav = ({ userId }) => {
   const [userdata, setUserdata] = useState({});
-  const [showDropdown, setShowDropdown] = useState(false);
+  // const [showDropdown, setShowDropdown] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate()
@@ -43,14 +43,15 @@ const TeacherNav = ({ userId }) => {
   const handleProfileClick = () => {
     navigate(`/teachers/TeacherProfile/${userId}`); // Redirect to user profile page
     handleClose(); // Close the menu
+    // console.log("userdata:", userdata);
   }
   const logout = () => {
     window.open("http://localhost:8000/logout", "_self");
   }
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  }
+  // const toggleDropdown = () => {
+  //   setShowDropdown(!showDropdown);
+  // }
 
   return (
     <>
@@ -66,7 +67,7 @@ const TeacherNav = ({ userId }) => {
               <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown> */}
-           <Tooltip title="Account settings">
+        <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
             size="small"
@@ -76,9 +77,8 @@ const TeacherNav = ({ userId }) => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar src={userdata?.image} sx={{ width: 50, height: 50 }}>
-            {/* <img src={userdata?.image} style={{ width: "50px", borderRadius: "50%" }} alt="" /> */}
-            </Avatar>
+           <Avatar src={userdata?.image} onError={(e) => e.target.src = 'path_to_fallback_image'}  style={{ width: "50px", height:"50px", borderRadius: "50%" }}/>
+
           </IconButton>
         </Tooltip>
         </Container>
@@ -118,7 +118,7 @@ const TeacherNav = ({ userId }) => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleProfileClick}>
-          <Avatar src={userdata?.image} /> Profile
+          <Avatar src={userdata?.image} onError={(e) => e.target.src = 'path_to_fallback_image'}/> Profile
         </MenuItem>
         <MenuItem onClick={logout}>
           <ListItemIcon>

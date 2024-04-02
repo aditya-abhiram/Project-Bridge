@@ -9,6 +9,16 @@ import {
   CForm,
   CFormTextarea,
 } from "@coreui/react";
+import {
+  CFormInput,
+  CFormSelect,
+  CInputGroup,
+  CContainer,
+  CRow,
+  CCol,
+  CBadge,
+  CCloseButton,
+} from "@coreui/react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -234,13 +244,14 @@ const RequestFormModal = ({
           className="row g-3 needs-validation"
           noValidate
           validated={validated}
+          id="request_form"
         >
           <CModalHeader closeButton>
             <CModalTitle id="RequestFormModalTitle">Request Form</CModalTitle>
           </CModalHeader>
           <CModalBody>
             {/* Form fields */}
-            <TextField
+            <CFormInput
               // labelId="name-label"
               type="text"
               name="projectName"
@@ -248,22 +259,25 @@ const RequestFormModal = ({
               onChange={handleInputChange}
               placeholder="Project Name"
               id="outlined-disabled"
-              label="Project Name"
+              // label="Project Name"
+              floatingLabel="Project Name"
               defaultValue="Hello World"
               style={{ marginTop: "25px", width: '100%' }}
               disabled
             />
-            <TextField
+            <CFormTextarea
               name="projectDescription"
               value={formData.projectDescription}
               onChange={handleInputChange}
               placeholder="Project Description"
               id="outlined-disabled"
-              label="Project Description"
+              // label="Project Description"
+              floatingLabel="Project Description"
               defaultValue="Hello World"
-              style={{ marginTop: "25px" , width: '100%'}}
-              multiline
-              maxRows={4}
+              style={{ marginTop: "25px" , width: '100%', minHeight: '150px' }}
+              // multiline
+              // maxRows={4}
+              // rows={4}
               disabled
             />
             <CFormTextarea

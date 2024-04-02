@@ -44,3 +44,7 @@ ul{
         background-color: rgb(255, 255, 255) !important;
      }
 }
+
+#delete_modal_body{
+    margin-top: 0 !important;
+}

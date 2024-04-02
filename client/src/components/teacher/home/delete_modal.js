@@ -34,8 +34,10 @@ function DeleteModal({ projectId, deleteProject }) {
         <CModalHeader closeButton>
           <CModalTitle id="StaticBackdropExampleLabel">DELETE PROJECT?</CModalTitle>
         </CModalHeader>
-        <CModalBody>
-          Please confirm to delete the project.
+        <CModalBody id="delete_modal_body">
+          Are you sure you want to delete this project ?<br></br>
+          <br></br>
+          This process cannot be undone.
         </CModalBody>
         <CModalFooter>
           <Button color="secondary" variant="outlined" onClick={() => setVisible(false)}>

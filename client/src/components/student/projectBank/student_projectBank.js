@@ -7,6 +7,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RequestFormModal from './RequestFormModal';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import './student_projectBank.css'
 const ProjectBank = () => {
     const { userId } = useParams();
     const [projects, setProjects] = useState([]);
@@ -132,6 +133,7 @@ const ProjectBank = () => {
                             aria-label="expand row"
                             size="small"
                             onClick={() => setOpen(!open)}
+                            id='collapse_btn'
                         >
                             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                         </IconButton>
@@ -162,7 +164,7 @@ const ProjectBank = () => {
                                 <Typography variant="h6" gutterBottom component="div">
                                     Project Details
                                 </Typography>
-                                <Typography>{project.project_description}</Typography>
+                                <Typography>{`Project Description: ${project.project_description}`}</Typography>
                                 <Typography>{`Pre-requisites: ${project.pre_requisites.join(', ')}`}</Typography>
                                 <Typography>{`CG Cutoff: ${project.cg_cutoff}`}</Typography>
                                 <Typography>{`CG Eligibility: ${project.cg_eligibility}`}</Typography>
@@ -188,7 +190,7 @@ const ProjectBank = () => {
     return (
         <div>
             <h1>Project Bank</h1>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} id="main_table">
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow>

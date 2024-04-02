@@ -170,6 +170,7 @@ function EditModal({ projectId, closeModal }) {
                     }))
                   }
                   feedbackInvalid="Please enter Project Description"
+                  style={{ minHeight: '150px' }}
                   required
                 />
               </CCol>
