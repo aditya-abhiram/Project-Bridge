@@ -10,6 +10,7 @@ import {
   CContainer,
   CRow,
   CCol,
+  CForm,
   // CBadge,
   // CCloseButton,
   // CForm,
@@ -90,7 +91,7 @@ const handleSubmit = async (e) => {
     <CContainer>
       <CRow>
       <CCol>
-      <div id="profile_form" style={{width:'100%', left:'0'}}>
+      <div id="profile_form" style={{width:'100%', left:'0', marginBottom:'0'}}>
       <form onSubmit={handleSubmit}>
         <CRow>
             <CCol>
@@ -181,25 +182,47 @@ const handleSubmit = async (e) => {
           floatingLabel="CGPA"
           name="cg" min="0" step="0.01" max="10" value={formData.cg} onChange={handleInputChange} disabled={!editMode} />
           <br/><br/>
+
+          <CRow>
+                <CCol>
+                <CFormInput type="file" id="formFile" accept="application/pdf" label="Resume (pdf)" disabled={!editMode}/>
+                </CCol>
+                <CCol>
+                <CButton color="danger" disabled={!editMode}>Delete Resume</CButton>
+                </CCol>
+            </CRow>
+                  <br></br>
+            <CRow>
+              <CCol>
+              <CFormInput type="file" id="formFile" label="Performance Sheet (pdf)" disabled={!editMode}/>
+              </CCol>
+              <CCol>
+              <CButton color="danger" disabled={!editMode}>Delete Performance Sheet</CButton>
+              </CCol>
+            </CRow>
       </form>
     </div>
       </CCol>
-      <CCol>
-        <div id="files" style={{width:'80%', position:'relative', left:'10%', top:'20%'}}>
-        <h2>Upload files</h2>
-        <hr></hr>
-        <br></br>
-        <CRow>
-          <CFormInput type="file" id="formFile" accept="application/pdf" label="Resume (pdf)" />
-          <CButton color="danger">Delete Resume</CButton>
-        </CRow>
-              <br></br>
-        <CRow>
-          <CFormInput type="file" id="formFile" label="Performance Sheet (pdf)"/>
-          <CButton color="danger">Delete Performance Sheet</CButton>
-        </CRow>
-        </div>
-      </CCol> 
+      {/* <CCol>
+        <CForm id='files_form'>
+            <div id="files" style={{width:'80%', position:'relative', left:'10%', top:'20%'}}>
+                  <div id='title_profile'>
+                  <h2 style={{color: "white"}} id='child_title'>Upload files</h2>
+                      <Button variant="contained" color="success" type="submit" id='child_title'>Save Files</Button>
+                  </div>              
+            <hr></hr>
+            <CRow>
+              <CFormInput type="file" id="formFile" accept="application/pdf" label="Resume (pdf)" />
+              <CButton color="danger">Delete Resume</CButton>
+            </CRow>
+                  <br></br>
+            <CRow>
+              <CFormInput type="file" id="formFile" label="Performance Sheet (pdf)"/>
+              <CButton color="danger">Delete Performance Sheet</CButton>
+            </CRow>
+            </div>
+        </CForm>
+      </CCol>  */}
       </CRow>
     </CContainer>
        
