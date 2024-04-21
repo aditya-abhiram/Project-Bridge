@@ -90,6 +90,7 @@ function TeacherHome() {
 
   return (
     <>
+    <a href={`/teachers/RequestsPage/${userId}`} style={{left:'48%', position:'relative', color:'white'}}> Project Requests </a>
     <div id="body">
       <Button
         className="mb-3"

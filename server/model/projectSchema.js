@@ -8,7 +8,10 @@ const projectSchema = new mongoose.Schema({
   project_description: String,
   project_domain: String,
   cg_cutoff: String,
-  pre_requisites: Array
+  project_slots: String,
+  filled_slots: String,
+  pre_requisites: Array,
+  finalized_students: Array
 });
 
 const projectdb = mongoose.model("project", projectSchema);

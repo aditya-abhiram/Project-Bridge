@@ -87,7 +87,7 @@ const TeacherProfile = () => {
               )}
         </div>
         <CFormInput
-         type="text" name="name" value={formData.name} onChange={handleInputChange} disabled={!editMode} 
+         type="text"  name="name" value={formData.name} onChange={handleInputChange} disabled={!editMode} 
         //  id="name" 
          id="floatingInput"
          floatingClassName="mb-3"

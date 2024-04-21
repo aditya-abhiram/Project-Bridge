@@ -12,6 +12,9 @@ import {
   CBadge,
   CCloseButton,
   CForm,
+  CFormCheck,
+  CFormLabel,
+  CFormInputWithMask,
 } from "@coreui/react";
 import "./project_form.css";
 import '@coreui/coreui/dist/css/coreui.min.css'
@@ -22,6 +25,7 @@ function ProjectForm({ saveProject, closeModal, teacherId }) {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [projectType, setProjectType] = useState("");
+  const [projectSlots, setProjectSlots] = useState("")
   const [projectDomain, setProjectDomain] = useState("");
   const [cgpaCutoff, setCGPACutoff] = useState("");
   const [prerequisites, setPrerequisites] = useState([]);
@@ -62,6 +66,7 @@ function ProjectForm({ saveProject, closeModal, teacherId }) {
       projectName,
       projectDescription,
       projectType,
+      projectSlots,
       projectDomain,
       cgpaCutoff,
       prerequisites,
@@ -75,6 +80,7 @@ function ProjectForm({ saveProject, closeModal, teacherId }) {
       <h2>Add Project</h2>
       <br></br>
       <CForm
+        // style={{color: 'gray'}}
         className="row g-3 needs-validation"
         noValidate
         validated={validated}
@@ -144,16 +150,38 @@ function ProjectForm({ saveProject, closeModal, teacherId }) {
             </CCol>
           </CRow>
           <br></br>
+          <CRow>
+            <CCol>
+              <CFormInput
+                    type="text"
+                    id="floatingInput"
+                    floatingClassName="mb-3"
+                    floatingLabel="Specify Domain"
+                    placeholder="name@example.com"
+                    value={projectDomain}
+                    onChange={(e) => setProjectDomain(e.target.value)}
+                  />
+            </CCol>
+            <CCol>
+            <CFormInput
+                type="text"
+                id="floatingInput"
+                floatingClassName="mb-3"
+                floatingLabel="Number of slots"
+                placeholder="Enter number of slots"
+                value={projectSlots}
+                onChange={(e) => {
+                    // Remove non-numeric characters
+                    const inputValue = e.target.value.replace(/\D/g, '');
+                    // Limit input to two digits
+                    const truncatedValue = inputValue.slice(0, 2);
+                    // Update state with the sanitized value
+                    setProjectSlots(truncatedValue);
+                }}
+            />
+            </CCol>
+          </CRow>
 
-          <CFormInput
-            type="text"
-            id="floatingInput"
-            floatingClassName="mb-3"
-            floatingLabel="Specify Domain"
-            placeholder="name@example.com"
-            value={projectDomain}
-            onChange={(e) => setProjectDomain(e.target.value)}
-          />
           <br></br>
           <CInputGroup className="mb-3" id="pre_req_grp">
             <CFormInput

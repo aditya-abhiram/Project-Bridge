@@ -9,6 +9,7 @@ exports.saveProject = async (req, res) => {
           projectDescription,
           projectType,
           projectDomain,
+          projectSlots,
           cgpaCutoff,
           prerequisites,
         } = req.body;
@@ -20,8 +21,10 @@ exports.saveProject = async (req, res) => {
           project_description: projectDescription,
           project_type: projectType,
           project_domain: projectDomain,
+          project_slots: projectSlots,
           cg_cutoff: cgpaCutoff,
           pre_requisites: prerequisites,
+          filled_slots: "0"
         });
     
         // Save the project to the database
@@ -47,7 +50,9 @@ exports.updateProject = async (req, res) => {
           project_description: updatedProjectData.projectDescription,
           project_domain: updatedProjectData.projectDomain,
           cg_cutoff: updatedProjectData.cgpaCutoff,
+          project_slots:updatedProjectData.projectSlots,
           pre_requisites: updatedProjectData.prerequisites,
+          
         };
     
         // Update the project in the database
@@ -110,3 +115,4 @@ exports.projectData = async (req, res) => {
         res.status(500).json({ error: "Failed to fetch project" });
       }
 };
+

@@ -10,6 +10,7 @@ import TeacherHome from './components/teacher/home/teacher_home';
 import StudentProfile from './components/student/student_profile';
 import TeacherProfile from './components/teacher/profile/teacher_profile';
 import ProjectBank from './components/student/projectBank/student_projectBank';
+import ProjectRequests from './components/teacher/requests/teacher_requestsPage';
 import { Route, Routes, useParams } from 'react-router-dom';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
       <Route path="/students/StudentProfile/:userId/*" element={<StudentPageWrapper component={StudentProfile} />} />
       <Route path="/teachers/TeacherProfile/:userId/*" element={<TeacherPageWrapper component={TeacherProfile} />} />
       <Route path="/students/ProjectBank/:userId/*" element={<StudentPageWrapper component={ProjectBank} />} />
+      <Route path="/teachers/RequestsPage/:userId/*" element={<TeacherPageWrapper component={ProjectRequests}/>} />
       <Route path="*" element={<Error />} />
     </Routes>
   );

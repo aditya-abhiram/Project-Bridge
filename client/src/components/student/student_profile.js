@@ -1,7 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-
+import {
+  CFormInput,
+  // CFormTextarea,
+  CFormSelect,
+  // CInputGroup,
+  CButton,
+  CContainer,
+  CRow,
+  CCol,
+  // CBadge,
+  // CCloseButton,
+  // CForm,
+} from "@coreui/react";
+import Button from '@mui/material/Button';
+import './student_profile.css'
 const StudentProfile = () => {
   const { userId } = useParams();
   const [studentData, setStudentData] = useState(null);
@@ -30,13 +44,8 @@ const StudentProfile = () => {
     }
   };
 
-
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-  
-    // If the "Degree" field is being changed and the value is changing to "Single Degree",
-    // reset the value of the "Second Degree" field to an empty string
     if (name === "degree" && value === "Single Degree") {
       setFormData({
         ...formData,
@@ -50,20 +59,21 @@ const StudentProfile = () => {
       });
     }
   };
-  
-  // Function to handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.put(`http://localhost:8000/students/updateData/${userId}`, formData);
-      // After successful submission, fetch updated data again
-      fetchStudentData(userId);
-      // Disable edit mode after saving
-      setEditMode(false);
-    } catch (error) {
-      console.error("Error saving student data:", error);
-    }
-  };
+
+// Function to handle form submission
+const handleSubmit = async (e) => {
+  e.preventDefault(); // Prevent default form submission behavior
+  console.log('Form submitted');
+  try {
+    await axios.put(`http://localhost:8000/students/updateData/${userId}`, formData);
+    // After successful submission, fetch updated data again
+    fetchStudentData(userId);
+    // Disable edit mode after saving
+    setEditMode(false);
+  } catch (error) {
+    console.error("Error saving student data:", error);
+  }
+};
 
   
   // Function to toggle edit mode
@@ -71,98 +81,128 @@ const StudentProfile = () => {
     setEditMode(!editMode);
   };
 
+  
   if (!studentData) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
+    <CContainer>
+      <CRow>
+      <CCol>
+      <div id="profile_form" style={{width:'100%', left:'0'}}>
       <form onSubmit={handleSubmit}>
-        <h2>My Profile</h2>
-        {editMode ? (
-          <>
-            <button type="submit">Save</button>
-
-          </>
-        ) : (
-          <button type="button" onClick={toggleEditMode}>Edit</button>
-        )}
+        <CRow>
+            <CCol>
+              <div id='title_profile'>
+              <h2 style={{color: "white"}} id='child_title'>My Profile</h2>
+              {editMode ? (
+                <>
+                  <Button variant="contained" color="success" type="submit" id='child_title'>Save</Button>
+                </>
+              ) : (
+                <Button variant="contained" color="secondary" type="button" onClick={toggleEditMode} id='child_title'>Edit</Button>
+              )}
+              </div>
+            </CCol>
+        </CRow>
+        <hr></hr>
         <br/><br/>
-        <label htmlFor="name">Name:</label><br/>
-        <input type="text" id="name" name="name" value={formData.name} onChange={handleInputChange} disabled={!editMode} /><br/><br/>
-        <label htmlFor="idNumber">Id Number:</label><br/>
-        <input type="text" id="idNumber" name="idNumber" value={formData.idNumber} onChange={handleInputChange} disabled={!editMode} /><br/><br/>
-        <div>
-          <label>Degree:</label><br/>
-          <label htmlFor="singleDegree">
-            <input
-              type="radio"
-              id="singleDegree"
-              name="degree"
-              value="Single Degree"
-              checked={formData.degree === "Single Degree"}
-              onChange={handleInputChange}
-              disabled={!editMode}
-            />
-            Single Degree
-          </label>
-          <label htmlFor="dualDegree">
-            <input
-              type="radio"
-              id="dualDegree"
-              name="degree"
-              value="Dual Degree"
-              checked={formData.degree === "Dual Degree"}
-              onChange={handleInputChange}
-              disabled={!editMode}
-            />
-            Dual Degree
-          </label>
-        </div><br/>
-        <div>
-          <label htmlFor="firstDegree">B.E Degree</label><br/>
-          <select
-            id="firstDegree"
+        <CFormInput
+        type="text" name="name" value={formData.name} onChange={handleInputChange} disabled={!editMode} 
+        id="floatingInput"
+        floatingClassName="mb-3"
+        floatingLabel="Name"
+        placeholder="name@example.com"
+        feedbackInvalid="Please enter valid Name"
+        required
+        />
+
+        <CFormInput type="text" name="idNumber" value={formData.idNumber} onChange={handleInputChange} disabled={!editMode} 
+         id="floatingInput"
+         floatingClassName="mb-3"
+         floatingLabel="ID Number"
+         placeholder="name@example.com"
+         feedbackInvalid="Please enter valid ID number"
+         required
+        />
+
+        <CFormSelect
+          id="floatingInput"
+          floatingLabel="Degree"
+          name="degree"
+          value={formData.degree}
+          onChange={handleInputChange}
+          disabled={!editMode}
+          options={[
+            { label: "Single Degree", value: "Single Degree" },
+            { label: "Dual Degree", value: "Dual Degree" }
+          ]}
+        /><br/>
+
+          <CFormSelect
+            id="floatingInput"
+            floatingLabel="B.E Degree"
             name="firstDegree"
             value={formData.firstDegree}
             onChange={handleInputChange}
             disabled={!editMode}
-          >
-            <option value="">Select B.E Degree</option>
-            <option value="CE">Civil Engineering(CE)</option>
-            <option value="CHE">Chemical Engineering(CHE)</option>
-            <option value="CS">Computer Science Engineering (CSE)</option>
-            <option value="ECE">Electronics and Communication Engineering(ECE)</option>
-            <option value="EEE">Electrical and Electronics Engineering (EEE)</option>
-            <option value="ENI">Electronics and Instrumention Engineering (ENI)</option>
-            <option value="ME">Mechanical Engineering (ME)</option>
-            <option value="PHA">B.Pharma (PHA)</option>
-          </select>
-        </div><br/>
-        <div>
-          <label htmlFor="secondDegree">MSc. Degree</label><br/>
-          <select
-            id="secondDegree"
+            options={[
+              "Select",
+              { label: "Civil Engineering(CE)", value: "CE" },
+              { label: "Computer Science Engineering (CSE)", value: "CSE" },
+              { label: "Electronics and Communication Engineering(ECE)", value: "ECE" },
+              { label: "Electrical and Electronics Engineering (EEE)", value: "EEE" },
+              { label: "Electronics and Instrumention Engineering (ENI)", value: "ENI" },
+              { label: "Mechanical Engineering (ME)", value: "ME" },
+              { label: "B.Pharma (PHA)", value: "PHA" },
+            ]}
+          />
+          <br></br>
+          <CFormSelect
+            id="floatingInput"
+            floatingLabel="MSc. Degree"
             name="secondDegree"
             value={formData.secondDegree}
             onChange={handleInputChange}
             disabled={!editMode || formData.degree !== "Dual Degree"}
-          >
-            <option value="">Select MSc. Degree</option>
-            <option value="BIO">Biology (BIO)</option>
-            <option value="CHEM">Chemistry (CHEM)</option>
-            <option value="ECON">Economics (ECON)</option>
-            <option value="MATH">Mathematics (MATH)</option>
-            <option value="PHY">Physics (PHY)</option>
-            
-          </select>
-        </div><br/>
-          <div>
-          <label htmlFor="cg">Current CGPA</label><br/>
-          <input type="number" id="cg" name="cg" min="0" step="0.01" value={formData.cg} onChange={handleInputChange} disabled={!editMode} /><br/><br/>
-          </div>
+            options={[
+              "Select",
+              { label: "Biology (BIO)", value: "BIO" },
+              { label: "Chemistry (CHEM)", value: "CHEM" },
+              { label: "Economics (ECON)", value: "ECON" },
+              { label: "Mathematics (MATH)", value: "MATH" },
+              { label: "Physics (PHY)", value: "PHY" },
+            ]}
+          />
+          <br></br>
+          <CFormInput type="number" 
+          id="floatingInput"
+          floatingLabel="CGPA"
+          name="cg" min="0" step="0.01" max="10" value={formData.cg} onChange={handleInputChange} disabled={!editMode} />
+          <br/><br/>
       </form>
     </div>
+      </CCol>
+      <CCol>
+        <div id="files" style={{width:'80%', position:'relative', left:'10%', top:'20%'}}>
+        <h2>Upload files</h2>
+        <hr></hr>
+        <br></br>
+        <CRow>
+          <CFormInput type="file" id="formFile" accept="application/pdf" label="Resume (pdf)" />
+          <CButton color="danger">Delete Resume</CButton>
+        </CRow>
+              <br></br>
+        <CRow>
+          <CFormInput type="file" id="formFile" label="Performance Sheet (pdf)"/>
+          <CButton color="danger">Delete Performance Sheet</CButton>
+        </CRow>
+        </div>
+      </CCol> 
+      </CRow>
+    </CContainer>
+       
   );
 };
 

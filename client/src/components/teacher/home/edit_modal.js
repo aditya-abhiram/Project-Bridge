@@ -33,6 +33,7 @@ function EditModal({ projectId, closeModal }) {
     projectType: "",
     cgpaCutoff: "",
     projectDomain: "",
+    projectSlots: "",
     prerequisites: [],
     newPrerequisite: "",
   });
@@ -54,9 +55,11 @@ function EditModal({ projectId, closeModal }) {
           projectType: data.project.project_type,
           cgpaCutoff: data.project.cg_cutoff,
           projectDomain: data.project.project_domain,
+          projectSlots: data.project.project_slots,
           prerequisites: data.project.pre_requisites,
           newPrerequisite: "",
         });
+
       } catch (error) {
         console.error("Error fetching project data:", error);
       }
@@ -97,6 +100,7 @@ function EditModal({ projectId, closeModal }) {
         projectType: responseData.project_type,
         cgpaCutoff: responseData.cg_cutoff,
         projectDomain: responseData.project_domain,
+        projectSlots: responseData.project_slots,
         prerequisites: responseData.pre_requisites,
         newPrerequisite: "",
       };
@@ -217,6 +221,8 @@ function EditModal({ projectId, closeModal }) {
               </CCol>
             </CRow>
             <br></br>
+            <CRow>
+            <CCol>
             <CFormInput
               type="text"
               floatingLabel="Specify Domain"
@@ -228,6 +234,28 @@ function EditModal({ projectId, closeModal }) {
                 }))
               }
             />
+            </CCol>
+            <CCol>
+            <CFormInput
+                type="text"
+                floatingLabel="Number of Slots"
+                value={projectData.projectSlots || ""}
+                onChange={(e) => {
+                    // Remove non-numeric characters
+                    const inputValue = e.target.value.replace(/\D/g, '');
+                    // Limit input to two digits
+                    const truncatedValue = inputValue.slice(0, 2);
+                    // Update state with the sanitized value
+                    setProjectData((prevState) => ({
+                        ...prevState,
+                        projectSlots: truncatedValue,
+                    }));
+                }}
+            />
+
+            </CCol>
+          </CRow>
+            
             <br></br>
             <CInputGroup className="mb-3">
               <CFormInput
