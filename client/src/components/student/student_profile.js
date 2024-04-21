@@ -17,6 +17,10 @@ import {
 } from "@coreui/react";
 import Button from '@mui/material/Button';
 import './student_profile.css'
+
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import app  from "../firebase";
+
 const StudentProfile = () => {
   const { userId } = useParams();
   const [studentData, setStudentData] = useState(null);
@@ -29,7 +33,83 @@ const StudentProfile = () => {
     cg: "",
   });
   const [editMode, setEditMode] = useState(false);
+  
+  const [resume, setResume] = useState(undefined);
+  const [performanceSheet, setPerformanceSheet] = useState(undefined);
+  const [resumePerc, setResumePerc] = useState(0);
+  const [performaceSheetPerc, setPerformanceSheetPerc] = useState(0);
+  const [inputs, setInputs] = useState({});
 
+  useEffect(() => {
+    resume && uploadFile(resume, "resumeUrl");
+  }, [resume]);
+
+  useEffect(() => {
+    performanceSheet && uploadFile(performanceSheet, "performanceSheetUrl");
+  }, [performanceSheet]);
+
+  const uploadFile = (file, fileType) => {
+    const storage = getStorage(app);
+    const folder = fileType === "resumeUrl" ? "resume/" : "performanceSheet/";
+    const fileTypeSuffix = fileType === "resumeUrl" ? "_resume" : "_performanceSheet";
+    const fileName = userId + fileTypeSuffix;
+
+    const storageRef = ref(storage, folder + fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        fileType === "resumeUrl"
+          ? setResumePerc(Math.round(progress))
+          : setPerformanceSheetPerc(Math.round(progress));
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+          default:
+            break;
+        }
+      },
+      (error) => {
+        console.log(error);
+        switch (error.code) {
+          case "storage/unauthorized":
+            // User doesn't have permission to access the object
+            console.log(error);
+            break;
+          case "storage/canceled":
+            // User canceled the upload
+            break;
+          case "storage/unknown":
+            // Unknown error occurred, inspect error.serverResponse
+            break;
+          default:
+            break;
+        }
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log('DownloadURL - ', downloadURL);
+          setInputs((prev) => {
+            return {
+              ...prev,
+              [fileType]: downloadURL,
+            };
+          });
+        });
+      }
+    );
+  }
+
+
+  
   useEffect(() => {
     fetchStudentData(userId);
   }, [userId]);
@@ -81,6 +161,15 @@ const handleSubmit = async (e) => {
   const toggleEditMode = () => {
     setEditMode(!editMode);
   };
+
+  const handleFilesUpload = async (e) => {
+    e.preventDefault();
+    try{
+      await axios.post(`http://localhost:8000/students/uploadFiles/${userId}`, { ...inputs });
+    } catch (error){
+      console.log(error);
+    }
+  }
 
   
   if (!studentData) {
@@ -192,19 +281,19 @@ const handleSubmit = async (e) => {
                 </CCol>
             </CRow>
                   <br></br>
-            <CRow>
+            {/* <CRow>
               <CCol>
               <CFormInput type="file" id="formFile" label="Performance Sheet (pdf)" disabled={!editMode}/>
               </CCol>
               <CCol>
               <CButton color="danger" disabled={!editMode}>Delete Performance Sheet</CButton>
               </CCol>
-            </CRow>
+            </CRow> */}
       </form>
     </div>
       </CCol>
-      {/* <CCol>
-        <CForm id='files_form'>
+      <CCol>
+        <form id='files_form' onSubmit={handleFilesUpload}>
             <div id="files" style={{width:'80%', position:'relative', left:'10%', top:'20%'}}>
                   <div id='title_profile'>
                   <h2 style={{color: "white"}} id='child_title'>Upload files</h2>
@@ -212,17 +301,27 @@ const handleSubmit = async (e) => {
                   </div>              
             <hr></hr>
             <CRow>
-              <CFormInput type="file" id="formFile" accept="application/pdf" label="Resume (pdf)" />
+              <CFormInput 
+              type="file" 
+              id="resume" accept="application/pdf" label="Resume (pdf)" 
+              onChange={(e) => setResume((prev) => e.target.files[0])}
+              />
+              {resumePerc > 0 && "Uploading: " +  resumePerc + "%"}
               <CButton color="danger">Delete Resume</CButton>
             </CRow>
                   <br></br>
             <CRow>
-              <CFormInput type="file" id="formFile" label="Performance Sheet (pdf)"/>
+              <CFormInput 
+              type="file" 
+              id="performaceSheet" accept="application/pdf" label="Performance Sheet (pdf)"
+              onChange={(e) => setPerformanceSheet((prev) => e.target.files[0])}
+              />
+              {performaceSheetPerc > 0  && "Uploadeding: " + performaceSheetPerc  + "%"}
               <CButton color="danger">Delete Performance Sheet</CButton>
             </CRow>
             </div>
-        </CForm>
-      </CCol>  */}
+        </form>
+      </CCol> 
       </CRow>
     </CContainer>
        

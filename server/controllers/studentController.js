@@ -44,6 +44,33 @@ exports.updateData = async (req, res) => {
       }
 };
 
+exports.uploadFiles = async (req, res) => {
+  try{
+    const studentId = req.params.userId;
+    const { resumeUrl, performanceSheetUrl  } = req.body;
+    const updatedStudent = await studentdb.findOneAndUpdate(
+      { studentId },
+      { resumeUrl, performanceSheetUrl },
+      { new: true }
+    );
+
+    if (!updatedStudent) {
+      res.status(404).json({ error: "Student not found" });
+      return;
+    }
+
+    
+    if(!resumeUrl || !performanceSheetUrl){
+      res.status(404).json({ error: " File urls are required" });
+      return;
+    }
+
+    res.status(200).json(updatedStudent);
+  }
+  catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
 exports.getProjectsData = async (req, res) => {
   try {
     // Fetch all projects from projects collection
