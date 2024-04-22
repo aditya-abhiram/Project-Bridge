@@ -4,7 +4,7 @@ const studentController = require("../controllers/studentController");
 
 router.get("/getData/:userId", studentController.getData);
 router.put("/updateData/:userId", studentController.updateData);
-router.post("/uploadFiles/:userId", studentController.uploadFiles);
+// router.post("/uploadFiles/:userId", studentController.uploadFiles);
 router.get('/projectBank/:userId',studentController.getProjectsData);
 router.get('/getLiked/:studentId', studentController.getLikedProjects);
 router.post('/saveLiked/:studentId/:projectId', studentController.saveLikedProjects);

@@ -6,11 +6,11 @@ import {
   // CFormTextarea,
   CFormSelect,
   // CInputGroup,
-  CButton,
+  // CButton,
   CContainer,
   CRow,
   CCol,
-  CForm,
+  // CForm,
   // CBadge,
   // CCloseButton,
   // CForm,
@@ -52,9 +52,10 @@ const StudentProfile = () => {
     const storage = getStorage(app);
     const folder = fileType === "resumeUrl" ? "resume/" : "performanceSheet/";
     const fileTypeSuffix = fileType === "resumeUrl" ? "_resume" : "_performanceSheet";
-    const fileName = userId + fileTypeSuffix;
+    const nameType = fileType === "resumeUrl" ? "resumeName" : "performanceSheetName" ;
+    const fileName = userId + fileTypeSuffix + '_' + file.name;
 
-    const storageRef = ref(storage, folder + fileName);
+    const storageRef = ref(storage, folder + fileName );
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -101,6 +102,7 @@ const StudentProfile = () => {
             return {
               ...prev,
               [fileType]: downloadURL,
+              [nameType]: file.name,
             };
           });
         });
@@ -141,20 +143,21 @@ const StudentProfile = () => {
     }
   };
 
-// Function to handle form submission
-const handleSubmit = async (e) => {
-  e.preventDefault(); // Prevent default form submission behavior
-  console.log('Form submitted');
-  try {
-    await axios.put(`http://localhost:8000/students/updateData/${userId}`, formData);
-    // After successful submission, fetch updated data again
-    fetchStudentData(userId);
-    // Disable edit mode after saving
-    setEditMode(false);
-  } catch (error) {
-    console.error("Error saving student data:", error);
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
+    console.log('Form submitted');
+    console.log('formData:', formData);
+    console.log('inputs:', inputs);
+    try {
+      await axios.put(`http://localhost:8000/students/updateData/${userId}`, { ...formData, ...inputs });
+      // After successful submission, fetch updated data again
+      fetchStudentData(userId);
+      // Disable edit mode after saving
+      setEditMode(false);
+    } catch (error) {
+      console.error("Error saving student data:", error);
+    }
+  };
 
   
   // Function to toggle edit mode
@@ -162,14 +165,14 @@ const handleSubmit = async (e) => {
     setEditMode(!editMode);
   };
 
-  const handleFilesUpload = async (e) => {
-    e.preventDefault();
-    try{
-      await axios.post(`http://localhost:8000/students/uploadFiles/${userId}`, { ...inputs });
-    } catch (error){
-      console.log(error);
-    }
-  }
+  // const handleFilesUpload = async (e) => {
+  //   e.preventDefault();
+  //   try{
+  //     await axios.post(`http://localhost:8000/students/uploadFiles/${userId}`, { ...inputs });
+  //   } catch (error){
+  //     console.log(error);
+  //   }
+  // }
 
   
   if (!studentData) {
@@ -272,28 +275,40 @@ const handleSubmit = async (e) => {
           name="cg" min="0" step="0.01" max="10" value={formData.cg} onChange={handleInputChange} disabled={!editMode} />
           <br/><br/>
 
-          <CRow>
-                <CCol>
-                <CFormInput type="file" id="formFile" accept="application/pdf" label="Resume (pdf)" disabled={!editMode}/>
-                </CCol>
-                <CCol>
-                <CButton color="danger" disabled={!editMode}>Delete Resume</CButton>
-                </CCol>
+            <div id="files" 
+            // style={{width:'80%', position:'relative', left:'10%', top:'20%'}}
+            >
+                  <div id='title_profile'>
+                  <h2 style={{color: "white"}} id='child_title' disabled>Upload files</h2>
+                  </div>              
+            <hr></hr>
+            <CRow>
+              <CFormInput 
+              type="file" 
+              id="resume" accept="application/pdf" label="Resume (pdf)" 
+              disabled={!editMode}
+              onChange={(e) => setResume((prev) => e.target.files[0])}
+              />
+              {resumePerc > 0 && "Uploading: " +  resumePerc + "%"}
+              {/* <CButton color="danger">Delete Resume</CButton> */}
             </CRow>
                   <br></br>
-            {/* <CRow>
-              <CCol>
-              <CFormInput type="file" id="formFile" label="Performance Sheet (pdf)" disabled={!editMode}/>
-              </CCol>
-              <CCol>
-              <CButton color="danger" disabled={!editMode}>Delete Performance Sheet</CButton>
-              </CCol>
-            </CRow> */}
+            <CRow>
+              <CFormInput 
+              type="file" 
+              id="performaceSheet" accept="application/pdf" label="Performance Sheet (pdf)"
+              disabled={!editMode}
+              onChange={(e) => setPerformanceSheet((prev) => e.target.files[0])}
+              />
+              {performaceSheetPerc > 0  && "Uploadeding: " + performaceSheetPerc  + "%"}
+              {/* <CButton color="danger">Delete Performance Sheet</CButton> */}
+            </CRow>
+            </div>
       </form>
     </div>
       </CCol>
       <CCol>
-        <form id='files_form' onSubmit={handleFilesUpload}>
+        {/* <form id='files_form' onSubmit={handleFilesUpload}>
             <div id="files" style={{width:'80%', position:'relative', left:'10%', top:'20%'}}>
                   <div id='title_profile'>
                   <h2 style={{color: "white"}} id='child_title'>Upload files</h2>
@@ -320,7 +335,7 @@ const handleSubmit = async (e) => {
               <CButton color="danger">Delete Performance Sheet</CButton>
             </CRow>
             </div>
-        </form>
+        </form> */}
       </CCol> 
       </CRow>
     </CContainer>

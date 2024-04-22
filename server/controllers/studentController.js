@@ -21,56 +21,97 @@ exports.getData = async (req, res) => {
       }
 };
 
+// exports.updateData = async (req, res) => {
+//     // Logic for updating Student data
+//     try {
+//         const studentId = req.params.userId;
+//         const { name, idNumber, degree, firstDegree, secondDegree, cg, resumeUrl, performanceSheetUrl, resumeName, performanceSheetName  } = req.body;
+    
+//         const updatedStudent = await studentdb.findOneAndUpdate(
+//           { studentId },
+//           { name, idNumber, degree, firstDegree, secondDegree, cg , resumeUrl, performanceSheetUrl, resumeName, performanceSheetName  },
+//           { new: true }
+//         );
+    
+//         if (!updatedStudent) {
+//           res.status(404).json({ error: "Student not found" });
+//           return;
+//         }
+    
+//         res.status(200).json(updatedStudent);
+//       } catch (error) {
+//         res.status(500).json({ error: "Internal server error" });
+//       }
+// };
+
 exports.updateData = async (req, res) => {
-    // Logic for updating Student data
-    try {
-        const studentId = req.params.userId;
-        const { name, idNumber, degree, firstDegree, secondDegree, cg } = req.body;
-    
-        const updatedStudent = await studentdb.findOneAndUpdate(
+  // Logic for updating Student data
+  try {
+      const studentId = req.params.userId;
+      const { name, idNumber, degree, firstDegree, secondDegree, cg, resumeUrl, performanceSheetUrl, resumeName, performanceSheetName } = req.body;
+      // console.log("resumeName:", resumeName);
+      // console.log("resumeUrl:", resumeUrl);
+      // console.log("performanceSheetName:", performanceSheetName);
+      // console.log("performanceSheetUrl:", performanceSheetUrl);
+
+      const updatedStudent = await studentdb.findOneAndUpdate(
           { studentId },
-          { name, idNumber, degree, firstDegree, secondDegree, cg },
+          {
+              name,
+              idNumber,
+              degree,
+              firstDegree,
+              secondDegree,
+              cg,
+              resume: {
+                  resumeUrl,
+                  resumeName
+              },
+              performanceSheet: {
+                  performanceSheetUrl,
+                  performanceSheetName
+              }
+          },
           { new: true }
-        );
-    
-        if (!updatedStudent) {
-          res.status(404).json({ error: "Student not found" });
-          return;
-        }
-    
-        res.status(200).json(updatedStudent);
-      } catch (error) {
-        res.status(500).json({ error: "Internal server error" });
+      );
+
+      if (!updatedStudent) {
+          return res.status(404).json({ error: "Student not found" });
       }
+
+      return res.status(200).json(updatedStudent);
+  } catch (error) {
+      return res.status(500).json({ error: "Internal server error" });
+  }
 };
 
-exports.uploadFiles = async (req, res) => {
-  try{
-    const studentId = req.params.userId;
-    const { resumeUrl, performanceSheetUrl  } = req.body;
-    const updatedStudent = await studentdb.findOneAndUpdate(
-      { studentId },
-      { resumeUrl, performanceSheetUrl },
-      { new: true }
-    );
+// exports.uploadFiles = async (req, res) => {
+//   try{
+//     const studentId = req.params.userId;
+//     const { resumeUrl, performanceSheetUrl  } = req.body;
+//     const updatedStudent = await studentdb.findOneAndUpdate(
+//       { studentId },
+//       { resumeUrl, performanceSheetUrl },
+//       { new: true }
+//     );
 
-    if (!updatedStudent) {
-      res.status(404).json({ error: "Student not found" });
-      return;
-    }
+//     if (!updatedStudent) {
+//       res.status(404).json({ error: "Student not found" });
+//       return;
+//     }
 
     
-    if(!resumeUrl || !performanceSheetUrl){
-      res.status(404).json({ error: " File urls are required" });
-      return;
-    }
+//     if(!resumeUrl || !performanceSheetUrl){
+//       res.status(404).json({ error: " File urls are required" });
+//       return;
+//     }
 
-    res.status(200).json(updatedStudent);
-  }
-  catch (error) {
-    res.status(500).json({ error: "Internal server error" });
-  }
-}
+//     res.status(200).json(updatedStudent);
+//   }
+//   catch (error) {
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// }
 exports.getProjectsData = async (req, res) => {
   try {
     // Fetch all projects from projects collection

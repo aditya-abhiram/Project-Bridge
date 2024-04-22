@@ -12,9 +12,9 @@ import {
   CBadge,
   CCloseButton,
   CForm,
-  CFormCheck,
-  CFormLabel,
-  CFormInputWithMask,
+  // CFormCheck,
+  // CFormLabel,
+  // CFormInputWithMask,
 } from "@coreui/react";
 import "./project_form.css";
 import '@coreui/coreui/dist/css/coreui.min.css'

@@ -4,16 +4,16 @@ import axios from 'axios';
 import './teacher_profile.css'
 import {
   CFormInput,
-  CFormTextarea,
+  // CFormTextarea,
   CFormSelect,
-  CInputGroup,
-  CButton,
-  CContainer,
-  CRow,
-  CCol,
-  CBadge,
-  CCloseButton,
-  CForm,
+  // CInputGroup,
+  // CButton,
+  // CContainer,
+  // CRow,
+  // CCol,
+  // CBadge,
+  // CCloseButton,
+  // CForm,
 } from "@coreui/react";
 import Button from '@mui/material/Button';
 const TeacherProfile = () => {
