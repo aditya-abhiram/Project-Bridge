@@ -86,6 +86,8 @@ const TeacherProfile = () => {
                 <Button variant="contained" color="secondary" type="button" onClick={toggleEditMode} id='child_title'>Edit</Button>
               )}
         </div>
+        <hr></hr>
+        <br></br>
         <CFormInput
          type="text"  name="name" value={formData.name} onChange={handleInputChange} disabled={!editMode} 
         //  id="name" 

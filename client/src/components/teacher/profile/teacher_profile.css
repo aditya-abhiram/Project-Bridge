@@ -20,7 +20,7 @@
 #child_title{
     flex-wrap: 1;
     margin-top : 0 !important;
-    margin-bottom: 7%  !important;
+    /* margin-bottom: 7%  !important; */
 }
 
 /* .form-control:enabled {

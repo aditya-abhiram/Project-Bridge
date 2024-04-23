@@ -182,13 +182,12 @@ const StudentProfile = () => {
   return (
     <CContainer>
       <CRow>
-      <CCol>
-      <div id="profile_form" style={{width:'100%', left:'0', marginBottom:'0'}}>
+      <div id="profile_form" style={{width:'100%', left:'0', marginBottom:'0', paddingBottom: '0'}}>
       <form onSubmit={handleSubmit}>
         <CRow>
             <CCol>
               <div id='title_profile'>
-              <h2 style={{color: "white"}} id='child_title'>My Profile</h2>
+              <h2 style={{color: "white", marginBottom:'0'}} id='child_title'>My Profile</h2>
               {editMode ? (
                 <>
                   <Button variant="contained" color="success" type="submit" id='child_title'>Save</Button>
@@ -201,6 +200,9 @@ const StudentProfile = () => {
         </CRow>
         <hr></hr>
         <br/><br/>
+        <CRow>
+        <CCol>
+        <div id="student_details">
         <CFormInput
         type="text" name="name" value={formData.name} onChange={handleInputChange} disabled={!editMode} 
         id="floatingInput"
@@ -275,38 +277,43 @@ const StudentProfile = () => {
           name="cg" min="0" step="0.01" max="10" value={formData.cg} onChange={handleInputChange} disabled={!editMode} />
           <br/><br/>
 
-            <div id="files" 
-            // style={{width:'80%', position:'relative', left:'10%', top:'20%'}}
-            >
-                  <div id='title_profile'>
-                  <h2 style={{color: "white"}} id='child_title' disabled>Upload files</h2>
-                  </div>              
-            <hr></hr>
-            <CRow>
-              <CFormInput 
-              type="file" 
-              id="resume" accept="application/pdf" label="Resume (pdf)" 
-              disabled={!editMode}
-              onChange={(e) => setResume((prev) => e.target.files[0])}
-              />
-              {resumePerc > 0 && "Uploading: " +  resumePerc + "%"}
-              {/* <CButton color="danger">Delete Resume</CButton> */}
-            </CRow>
-                  <br></br>
-            <CRow>
-              <CFormInput 
-              type="file" 
-              id="performaceSheet" accept="application/pdf" label="Performance Sheet (pdf)"
-              disabled={!editMode}
-              onChange={(e) => setPerformanceSheet((prev) => e.target.files[0])}
-              />
-              {performaceSheetPerc > 0  && "Uploadeding: " + performaceSheetPerc  + "%"}
-              {/* <CButton color="danger">Delete Performance Sheet</CButton> */}
-            </CRow>
-            </div>
+        </div>
+        </CCol>
+        <CCol>
+        <div id="files" 
+        // style={{width:'80%', position:'relative', left:'10%', top:'20%'}}
+        >
+              <div id='title_profile'>
+              <h2 style={{color: "white"}} id='child_title' disabled>Upload files</h2>
+              </div>              
+        <hr></hr>
+        <CRow>
+          <CFormInput 
+          type="file" 
+          id="resume" accept="application/pdf" label="Resume (pdf)" 
+          disabled={!editMode}
+          onChange={(e) => setResume((prev) => e.target.files[0])}
+          />
+          {resumePerc > 0 && "Uploading: " +  resumePerc + "%"}
+          {/* <CButton color="danger">Delete Resume</CButton> */}
+        </CRow>
+              <br></br>
+        <CRow>
+          <CFormInput 
+          type="file" 
+          id="performaceSheet" accept="application/pdf" label="Performance Sheet (pdf)"
+          disabled={!editMode}
+          onChange={(e) => setPerformanceSheet((prev) => e.target.files[0])}
+          />
+          {performaceSheetPerc > 0  && "Uploadeding: " + performaceSheetPerc  + "%"}
+          {/* <CButton color="danger">Delete Performance Sheet</CButton> */}
+        </CRow>
+        </div>
+        </CCol>
+        </CRow>
+
       </form>
     </div>
-      </CCol>
       <CCol>
         {/* <form id='files_form' onSubmit={handleFilesUpload}>
             <div id="files" style={{width:'80%', position:'relative', left:'10%', top:'20%'}}>
