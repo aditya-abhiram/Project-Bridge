@@ -45,6 +45,11 @@ const TeacherNav = ({ userId }) => {
     handleClose(); // Close the menu
     // console.log("userdata:", userdata);
   }
+  const redirectHome = () => {
+    navigate(`/teachers/TeacherHome/${userId}`); // Redirect to user profile page
+    handleClose(); // Close the menu
+    // console.log("userdata:", userdata);
+  }
   const logout = () => {
     window.open("http://localhost:8000/logout", "_self");
   }
@@ -57,7 +62,7 @@ const TeacherNav = ({ userId }) => {
     <>
       <Navbar className="bg-body-tertiary mb-3" id="main_nav">
         <Container fluid id="main">
-          <Navbar.Brand href="#">Hello {userdata?.displayName} ! </Navbar.Brand>
+          <Navbar.Brand href="#" onClick={redirectHome}>Hello {userdata?.displayName} ! </Navbar.Brand>
           {/* <Dropdown show={showDropdown} onToggle={toggleDropdown}>
             <Dropdown.Toggle variant="light" id="dropdown-basic">
               <img src={userdata?.image} style={{ width: "50px", borderRadius: "50%" }} alt="" />

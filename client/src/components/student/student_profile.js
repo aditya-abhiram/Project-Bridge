@@ -20,8 +20,8 @@ import "./student_profile.css";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
-import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
   getStorage,

@@ -4,6 +4,6 @@ const teacherController = require("../controllers/teacherController");
 
 router.get("/getData/:userId", teacherController.getData);
 router.put("/updateData/:userId", teacherController.updateData);
-
+router.get("/projectRequests/:userId", teacherController.projectRequests);
 
 module.exports = router;
