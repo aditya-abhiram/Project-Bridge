@@ -9,9 +9,10 @@ const requestSchema = new mongoose.Schema({
       studentId: { type: String, required: true },
       reason_to_do_project: { type: String, required: true },
       pre_requisites_fullfilled: { type: [String], required: true },
+      status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
     },
   ],
-  status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
+  
 });
 
 // Create model from schema

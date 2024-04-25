@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -20,6 +21,7 @@ import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import "./teacher_requestsPage.css"
 const ProjectRequests = () => {
   const { userId } = useParams();
+  const [visible, setVisible] = useState(false);
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
@@ -35,6 +37,19 @@ const ProjectRequests = () => {
 
     fetchData();
   }, [userId]);
+
+  const updateRequestStatus = async (projectId, studentId, status) => {
+    try {
+      await axios.put(`http://localhost:8000/teachers/status/${projectId}/${studentId}`, { status });
+      // Refresh the project requests after updating status
+      const response = await fetch(`http://localhost:8000/teachers/projectRequests/${userId}`);
+      const data = await response.json();
+      setProjects(data);
+    } catch (error) {
+      console.error('Error updating request status:', error);
+    }
+  };
+
 
   return (
     <div style={{width:'92%', position:'relative', left:'3%', marginTop:'4%'}}>
@@ -60,9 +75,9 @@ const ProjectRequests = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {project.requestsData.map((request) => (
-                    <Row key={request.studentId} request={request} cgCutoff={parseFloat(project.project.cg_cutoff)} />
-                  ))}
+                {project.requestsData.map((request) => (
+                  <Row key={request.studentId} request={request} cgCutoff={parseFloat(project.project.cg_cutoff)} updateRequestStatus={updateRequestStatus} projectId={project.project._id} />
+                ))}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -73,11 +88,19 @@ const ProjectRequests = () => {
   );
 };
 
-const Row = ({ request, cgCutoff }) => {
+const Row = ({ request, cgCutoff, updateRequestStatus, projectId }) => {
   const [open, setOpen] = useState(false);
   const { studentInfo, reason_to_do_project, pre_requisites_fulfilled } = request;
 
   const isEligible = parseFloat(studentInfo.cg) > cgCutoff;
+
+  const handleApprove = () => {
+    updateRequestStatus(projectId, request.studentId, 'approved');
+  };
+
+  const handleReject = () => {
+    updateRequestStatus(projectId, request.studentId, 'rejected');
+  };
 
   return (
     <React.Fragment>
@@ -98,10 +121,10 @@ const Row = ({ request, cgCutoff }) => {
                 direction="row" spacing={2}
                 style={{display:"flex", justifyContent:"center"}}
                 >
-                  <Button variant="outlined" color="success" startIcon={<ThumbUpAltIcon />}>
+                  <Button variant="outlined" color="success" startIcon={<ThumbUpAltIcon />} onClick={handleApprove}>
                     Approve
                   </Button>
-                  <Button variant="outlined" color="error" endIcon={<ThumbDownAltIcon />}>
+                  <Button variant="outlined" color="error" endIcon={<ThumbDownAltIcon />} onClick={handleReject}>
                     Reject
                   </Button>
                 </Stack>

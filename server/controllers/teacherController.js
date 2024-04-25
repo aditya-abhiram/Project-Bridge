@@ -88,7 +88,8 @@ exports.projectRequests = async (req, res) => {
                 studentId,
                 studentInfo,
                 reason_to_do_project: request.reason_to_do_project,
-                pre_requisites_fulfilled: request.pre_requisites_fullfilled
+                pre_requisites_fulfilled: request.pre_requisites_fullfilled,
+                status: request.status
             };
 
             requestsData.push(requestData);
@@ -106,4 +107,34 @@ exports.projectRequests = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
 }
+};
+
+exports.updateRequestStatus = async (req, res) => {
+  try {
+    const { projectId, studentId } = req.params;
+    const { status } = req.body;
+
+    // Find the document matching projectId
+    const projectRequest = await requestsdb.findOne({ projectId });
+
+    if (!projectRequest) {
+      return res.status(404).json({ message: 'Project request not found' });
+    }
+
+    // Find the request in the requests array with matching studentId
+    const request = projectRequest.requests.find(req => req.studentId === studentId);
+
+    if (!request) {
+      return res.status(404).json({ message: 'Student request not found for this project' });
+    }
+
+    // Update the status of the request
+    request.status = status;
+    await projectRequest.save();
+
+    res.json({ message: 'Request status updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
