@@ -13,7 +13,11 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import "./teacher_requestsPage.css"
 const ProjectRequests = () => {
   const { userId } = useParams();
   const [projects, setProjects] = useState([]);
@@ -33,11 +37,11 @@ const ProjectRequests = () => {
   }, [userId]);
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div style={{width:'92%', position:'relative', left:'3%', marginTop:'4%'}}>
 
       {projects.map((project) => (
         <Box key={project.project._id} mb={3}>
-          <Typography variant="h5">{project.project.project_name}</Typography>
+          <Typography variant="h6" style={{position:'relative', left:'5%', textAlign:'left'}}>{project.project.project_name}</Typography>
           {project.requestsData.length === 0 ? (
             <Typography id="main_table">No Requests Yet</Typography>
           ) : (
@@ -45,13 +49,14 @@ const ProjectRequests = () => {
               <Table aria-label="collapsible table">
                 <TableHead>
                   <TableRow>
-                    <TableCell />
-                    <TableCell>Student Name</TableCell>
-                    <TableCell>Degree</TableCell>
-                    <TableCell>First Degree</TableCell>
-                    <TableCell>Second Degree</TableCell>
-                    <TableCell align="right">CGPA</TableCell>
-                    <TableCell align="right">Eligibility</TableCell>
+                    <TableCell width="2%" />
+                    <TableCell width="20%">Student Name</TableCell>
+                    <TableCell width="10%">Degree</TableCell>
+                    <TableCell width="10%">First Degree</TableCell>
+                    <TableCell width="10%">Second Degree</TableCell>
+                    <TableCell width="10%">CGPA</TableCell>
+                    <TableCell width="10%">Eligibility</TableCell>
+                    <TableCell align="right"></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -86,8 +91,21 @@ const Row = ({ request, cgCutoff }) => {
         <TableCell>{studentInfo.degree}</TableCell>
         <TableCell>{studentInfo.firstDegree}</TableCell>
         <TableCell>{studentInfo.secondDegree}</TableCell>
-        <TableCell align="right">{studentInfo.cg}</TableCell>
-        <TableCell align="right">{isEligible ? 'Eligible' : 'Not Eligible'}</TableCell>
+        <TableCell>{studentInfo.cg}</TableCell>
+        <TableCell>{isEligible ? 'Eligible' : 'Not Eligible'}</TableCell>
+        <TableCell align="right">
+                <Stack 
+                direction="row" spacing={2}
+                style={{display:"flex", justifyContent:"center"}}
+                >
+                  <Button variant="outlined" color="success" startIcon={<ThumbUpAltIcon />}>
+                    Approve
+                  </Button>
+                  <Button variant="outlined" color="error" endIcon={<ThumbDownAltIcon />}>
+                    Reject
+                  </Button>
+                </Stack>
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
