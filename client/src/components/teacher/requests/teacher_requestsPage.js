@@ -18,12 +18,20 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import Snackbar from "@mui/material/Snackbar";
+import AlertTitle from "@mui/material/AlertTitle";
+import Alert from "../../student/projectBank/Alert";
+import Chip from "@mui/material/Chip";
 import "./teacher_requestsPage.css"
 const ProjectRequests = () => {
   const { userId } = useParams();
   const [visible, setVisible] = useState(false);
   const [projects, setProjects] = useState([]);
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [snackbarTitle, setSnackbarTitle] = useState("");
+  const [alertStyle, setAlertStyle] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,15 +49,40 @@ const ProjectRequests = () => {
   const updateRequestStatus = async (projectId, studentId, status) => {
     try {
       await axios.put(`http://localhost:8000/teachers/status/${projectId}/${studentId}`, { status });
+      // Show success message
+      setSnackbarSeverity("success");
+      setSnackbarTitle("Success");
+      setSnackbarMessage(`Request ${status === 'approved' ? 'Approved' : 'Rejected'}`);
+      setAlertStyle({
+        backgroundColor: "#ddffdd",
+        color: "green",
+      });
+      setSnackbarOpen(true);
       // Refresh the project requests after updating status
       const response = await fetch(`http://localhost:8000/teachers/projectRequests/${userId}`);
       const data = await response.json();
       setProjects(data);
     } catch (error) {
-      console.error('Error updating request status:', error);
+      // Handle error
+      setSnackbarSeverity("error");
+      setSnackbarTitle("Failure");
+      setSnackbarMessage("Error approving/rejecting request");
+      console.error("Error sending request:", error);
+      setAlertStyle({
+        backgroundColor: "#ffdddd",
+        color: "red",
+      });
+      setSnackbarOpen(true); // Open Snackbar for error case
     }
   };
 
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   return (
     <div style={{width:'92%', position:'relative', left:'3%', marginTop:'4%'}}>
@@ -66,11 +99,11 @@ const ProjectRequests = () => {
                   <TableRow>
                     <TableCell width="2%" />
                     <TableCell width="20%">Student Name</TableCell>
-                    <TableCell width="10%">Degree</TableCell>
-                    <TableCell width="10%">First Degree</TableCell>
-                    <TableCell width="10%">Second Degree</TableCell>
-                    <TableCell width="10%">CGPA</TableCell>
-                    <TableCell width="10%">Eligibility</TableCell>
+                    <TableCell width="12%">Degree</TableCell>
+                    <TableCell width="12%">First Degree</TableCell>
+                    <TableCell width="12%">Second Degree</TableCell>
+                    <TableCell width="12%">CGPA</TableCell>
+                    <TableCell width="12%">Eligibility</TableCell>
                     <TableCell align="right"></TableCell>
                   </TableRow>
                 </TableHead>
@@ -84,6 +117,24 @@ const ProjectRequests = () => {
           )}
         </Box>
       ))}
+       <Snackbar
+        id="alert_snackbar"
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          id="alert_toast"
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+          style={alertStyle}
+        >
+          <AlertTitle>{snackbarTitle}</AlertTitle>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
@@ -117,17 +168,28 @@ const Row = ({ request, cgCutoff, updateRequestStatus, projectId }) => {
         <TableCell>{studentInfo.cg}</TableCell>
         <TableCell>{isEligible ? 'Eligible' : 'Not Eligible'}</TableCell>
         <TableCell align="right">
-                <Stack 
-                direction="row" spacing={2}
-                style={{display:"flex", justifyContent:"center"}}
-                >
-                  <Button variant="outlined" color="success" startIcon={<ThumbUpAltIcon />} onClick={handleApprove}>
-                    Approve
-                  </Button>
-                  <Button variant="outlined" color="error" endIcon={<ThumbDownAltIcon />} onClick={handleReject}>
-                    Reject
-                  </Button>
-                </Stack>
+        {request.status === 'pending' ? (
+            <Stack 
+              direction="row" spacing={2}
+              style={{display:"flex", justifyContent:"center"}}
+            >
+              <Button variant="outlined" color="success" startIcon={<ThumbUpAltIcon />} onClick={() => updateRequestStatus(projectId, request.studentId, 'approved')}>
+                Approve
+              </Button>
+              <Button variant="outlined" color="error" endIcon={<ThumbDownAltIcon />} onClick={() => updateRequestStatus(projectId, request.studentId, 'rejected')}>
+                Reject
+              </Button>
+            </Stack>
+          ) : request.status === 'approved' ? (
+            <Stack direction="row" spacing={1}>
+              <Chip label="Approved" color="success" variant="outlined" />
+            </Stack>
+          ) : (
+            <Stack direction="row" spacing={1}>
+              <Chip label="Rejected" color="primary" variant="outlined" />
+            </Stack>
+          )}
+                
         </TableCell>
       </TableRow>
       <TableRow>
