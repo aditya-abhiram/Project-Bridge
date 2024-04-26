@@ -171,7 +171,7 @@ const ProjectBank = () => {
                                 <Typography>{`CG Eligibility: ${project.cg_eligibility}`}</Typography>
                                 {/* <Button onClick={() => handleRequest(project)} variant="contained" color="primary">Request</Button> */}
                                 {/* Render other project details here */}
-                                <Stack direction="row" spacing={1}>
+                                <Stack direction="row" spacing={1} style={{justifyContent:"flex-start"}}>
                                     {isRequestSent ? (
                                         <Chip label="Request Already Sent" color="success" variant="outlined" />
                                     ) : (

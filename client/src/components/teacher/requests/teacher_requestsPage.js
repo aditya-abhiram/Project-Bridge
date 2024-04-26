@@ -22,7 +22,9 @@ import Snackbar from "@mui/material/Snackbar";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "../../student/projectBank/Alert";
 import Chip from "@mui/material/Chip";
+import ClearIcon from '@mui/icons-material/Clear';
 import "./teacher_requestsPage.css"
+import Clear from '@mui/icons-material/Clear';
 const ProjectRequests = () => {
   const { userId } = useParams();
   const [visible, setVisible] = useState(false);
@@ -52,10 +54,31 @@ const ProjectRequests = () => {
       // Show success message
       setSnackbarSeverity("success");
       setSnackbarTitle("Success");
-      setSnackbarMessage(`Request ${status === 'approved' ? 'Approved' : 'Rejected'}`);
+      // setSnackbarMessage(`Request ${status === 'approved' ? 'Approved' : 'Rejected'}`);
+      // setAlertStyle({
+      //   backgroundColor: "#ddffdd",
+      //   color: "green",
+      // });
+      let message, backgroundColor, color;
+
+      if (status === 'approved') {
+        message = "Request Approved";
+        backgroundColor = "rgb(12, 19, 13)";
+        color = "rgb(204, 232, 205)";
+      } else if (status === 'rejected') {
+        message = "Request Rejected";
+        backgroundColor = "rgb(7, 19, 24)";
+        color = "rgb(184, 231, 251)";
+      } else if (status === 'pending') {
+        message = "Request Set back to Pending";
+        backgroundColor = "rgb(25, 18, 7)";
+        color = "rgb(255, 226, 183)";
+      }
+
+      setSnackbarMessage(message);
       setAlertStyle({
-        backgroundColor: "#ddffdd",
-        color: "green",
+        backgroundColor: backgroundColor,
+        color: color,
       });
       setSnackbarOpen(true);
       // Refresh the project requests after updating status
@@ -183,10 +206,16 @@ const Row = ({ request, cgCutoff, updateRequestStatus, projectId }) => {
           ) : request.status === 'approved' ? (
             <Stack direction="row" spacing={1}>
               <Chip label="Approved" color="success" variant="outlined" />
+              <IconButton aria-label="Example" onClick={() => updateRequestStatus(projectId, request.studentId, 'pending')}>
+                <ClearIcon color="primary"  fontSize="medium" />
+              </IconButton>
             </Stack>
           ) : (
             <Stack direction="row" spacing={1}>
-              <Chip label="Rejected" color="primary" variant="outlined" />
+              <Chip label="Rejected" color="primary" variant="outlined"  />
+              <IconButton aria-label="Example" onClick={() => updateRequestStatus(projectId, request.studentId, 'pending')}>
+                <ClearIcon color="primary"  fontSize="medium" />
+              </IconButton>
             </Stack>
           )}
                 
