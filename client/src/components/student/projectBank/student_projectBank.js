@@ -135,62 +135,6 @@ const ProjectBank = () => {
     
         return (
             <>
-<<<<<<< HEAD
-                <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-                    <TableCell>
-                        <IconButton
-                            aria-label="expand row"
-                            size="small"
-                            onClick={() => setOpen(!open)}
-                            id='collapse_btn'
-                        >
-                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                        </IconButton>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                        {project.project_name}
-                    </TableCell>
-                    <TableCell>{project.project_description}</TableCell>
-                    <TableCell>{project.project_type}</TableCell>
-                    <TableCell>{project.project_domain}</TableCell>
-                    <TableCell>{project.teacher_name}</TableCell>
-                    <TableCell>{project.department}</TableCell>
-                    <TableCell>{project.pre_requisites.join(', ')}</TableCell>
-                    <TableCell>{project.cg_cutoff}</TableCell>
-                    <TableCell>{project.cg_eligibility}</TableCell>
-                    <TableCell>{projectStatus}</TableCell>
-                    <TableCell>
-                        <Checkbox
-                            checked={isLiked}
-                            onChange={(event) => handleLike(project.project_name, event.target.checked)}
-                        />
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={11}>
-                        <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box sx={{ margin: 1 }}>
-                                <Typography variant="h6" gutterBottom component="div">
-                                    Project Details
-                                </Typography>
-                                <Typography>{`Project Description: ${project.project_description}`}</Typography>
-                                <Typography>{`Pre-requisites: ${project.pre_requisites.join(', ')}`}</Typography>
-                                <Typography>{`CG Cutoff: ${project.cg_cutoff}`}</Typography>
-                                <Typography>{`CG Eligibility: ${project.cg_eligibility}`}</Typography>
-                                {/* <Button onClick={() => handleRequest(project)} variant="contained" color="primary">Request</Button> */}
-                                {/* Render other project details here */}
-                                <Stack direction="row" spacing={1} style={{justifyContent:"flex-start"}}>
-                                    {isRequestSent ? (
-                                        <Chip label="Request Already Sent" color="success" variant="outlined" />
-                                    ) : (
-                                        <Button onClick={() => handleRequest(project)} variant="contained" color="primary">Request</Button>
-                                    )}
-                                </Stack>
-                            </Box>
-                        </Collapse>
-                    </TableCell>
-                </TableRow>
-=======
                 {(!showLikedProjects || isLiked) && (
                     <>
                         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -251,7 +195,6 @@ const ProjectBank = () => {
                         )}
                     </>
                 )}
->>>>>>> ab9cf7f4d (liked projects filter)
             </>
         );
         
@@ -313,7 +256,7 @@ const ProjectBank = () => {
             )}
         </div>
     );
-}
+};
 
 
 export default ProjectBank;
