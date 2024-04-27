@@ -18,6 +18,7 @@ const ProjectBank = () => {
     const [draftDetails, setDraftDetails] = useState(null);
     const [sentRequests, setSentRequests] = useState([]);
     const [projectStatuses, setProjectStatuses] = useState({});
+    const [showLikedProjects, setShowLikedProjects] = useState(false);
     useEffect(() => {
         const fetchProjectBankData = async () => {
             try {
@@ -99,6 +100,12 @@ const ProjectBank = () => {
             console.error(error);
         }
     };
+
+    const toggleLikedProjects = () => {
+        setShowLikedProjects(!showLikedProjects);
+    };
+
+
     const updateProjectStatus = (projectId, status) => {
         setProjectStatuses(prevStatuses => ({
             ...prevStatuses,
@@ -128,6 +135,7 @@ const ProjectBank = () => {
     
         return (
             <>
+<<<<<<< HEAD
                 <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                     <TableCell>
                         <IconButton
@@ -182,57 +190,130 @@ const ProjectBank = () => {
                         </Collapse>
                     </TableCell>
                 </TableRow>
+=======
+                {(!showLikedProjects || isLiked) && (
+                    <>
+                        <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+                            <TableCell>
+                                <IconButton
+                                    aria-label="expand row"
+                                    size="small"
+                                    onClick={() => setOpen(!open)}
+                                    id='collapse_btn'
+                                >
+                                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                </IconButton>
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                                {project.project_name}
+                            </TableCell>
+                            <TableCell>{project.project_description}</TableCell>
+                            <TableCell>{project.project_type}</TableCell>
+                            <TableCell>{project.project_domain}</TableCell>
+                            <TableCell>{project.teacher_name}</TableCell>
+                            <TableCell>{project.department}</TableCell>
+                            <TableCell>{project.pre_requisites.join(', ')}</TableCell>
+                            <TableCell>{project.cg_cutoff}</TableCell>
+                            <TableCell>{project.cg_eligibility}</TableCell>
+                            <TableCell>{projectStatus}</TableCell>
+                            <TableCell>
+                                <Checkbox
+                                    checked={isLiked}
+                                    onChange={(event) => handleLike(project.project_name, event.target.checked)}
+                                />
+                            </TableCell>
+                        </TableRow>
+                        {open && (
+                            <TableRow>
+                                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={11}>
+                                    <Collapse in={open} timeout="auto" unmountOnExit>
+                                        <Box sx={{ margin: 1 }}>
+                                            <Typography variant="h6" gutterBottom component="div">
+                                                Project Details
+                                            </Typography>
+                                            <Typography>{`Project Description: ${project.project_description}`}</Typography>
+                                            <Typography>{`Pre-requisites: ${project.pre_requisites.join(', ')}`}</Typography>
+                                            <Typography>{`CG Cutoff: ${project.cg_cutoff}`}</Typography>
+                                            <Typography>{`CG Eligibility: ${project.cg_eligibility}`}</Typography>
+                                            {/* <Button onClick={() => handleRequest(project)} variant="contained" color="primary">Request</Button> */}
+                                            {/* Render other project details here */}
+                                            <Stack direction="row" spacing={1}>
+                                                {isRequestSent ? (
+                                                    <Chip label="Request Already Sent" color="success" variant="outlined" />
+                                                ) : (
+                                                    <Button onClick={() => handleRequest(project)} variant="contained" color="primary">Request</Button>
+                                                )}
+                                            </Stack>
+                                        </Box>
+                                    </Collapse>
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </>
+                )}
+>>>>>>> ab9cf7f4d (liked projects filter)
             </>
         );
+        
     };
     
     
 
+    const appliedProjects = projects.filter(project => sentRequests[project.projectId]);
+    const unappliedProjects = projects.filter(project => !sentRequests[project.projectId]);
+
     return (
         <div>
             <h1>Project Bank</h1>
+            <Button onClick={toggleLikedProjects}>
+                {showLikedProjects ? 'Show All Projects' : 'Show Liked Projects Only'}
+            </Button>
+
+            <h2>Applied Projects</h2>
             <TableContainer component={Paper} id="main_table">
                 <Table aria-label="collapsible table">
                     <TableHead>
-                        <TableRow>
-                            <TableCell />
-                            <TableCell>Project Name</TableCell>
-                            <TableCell>Project Description</TableCell>
-                            <TableCell>Project Type</TableCell>
-                            <TableCell>Project Domain</TableCell>
-                            <TableCell>Teacher Name</TableCell>
-                            <TableCell>Department</TableCell>
-                            <TableCell>Pre-requisites</TableCell>
-                            <TableCell>CG Cutoff</TableCell>
-                            <TableCell>CG Eligibility</TableCell>
-                            <TableCell>Project Status</TableCell>
-                            <TableCell>Like</TableCell>
-                        </TableRow>
+                        {/* Render table headers */}
                     </TableHead>
                     <TableBody>
-                        {projects.map((project, index) => (
-                            <Row key={index} project={project} projectStatuses={projectStatuses} updateProjectStatus={updateProjectStatus} handleRequest={() => setIsRequestFormOpen(true)} />
+                        {appliedProjects.map((project, index) => (
+                            <Row key={index} project={project} projectStatuses={projectStatuses} updateProjectStatus={updateProjectStatus} />
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <h2>Unapplied Projects</h2>
+            <TableContainer component={Paper} id="main_table">
+                <Table aria-label="collapsible table">
+                    <TableHead>
+                        {/* Render table headers */}
+                    </TableHead>
+                    <TableBody>
+                        {unappliedProjects.map((project, index) => (
+                            <Row key={index} project={project} projectStatuses={projectStatuses} updateProjectStatus={updateProjectStatus} />
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
             {isRequestFormOpen && (
-               <RequestFormModal
-               visible={isRequestFormOpen}
-               onClose={() => setIsRequestFormOpen(false)}
-               project={selectedProject}
-               userId={userId}
-               selectedProject={selectedProject} // Pass selectedProject to RequestFormModal
-               draftDetails={draftDetails} 
-               setSentRequests={setSentRequests} 
-               sentRequests={sentRequests} 
-               setProjectStatuses={setProjectStatuses}
-               projectStatuses={projectStatuses}
-           />           
-        )}
+                <RequestFormModal
+                    visible={isRequestFormOpen}
+                    onClose={() => setIsRequestFormOpen(false)}
+                    project={selectedProject}
+                    userId={userId}
+                    selectedProject={selectedProject}
+                    draftDetails={draftDetails}
+                    setSentRequests={setSentRequests}
+                    sentRequests={sentRequests}
+                    setProjectStatuses={setProjectStatuses}
+                    projectStatuses={projectStatuses}
+                />
+            )}
         </div>
-        
     );
-};
+}
+
 
 export default ProjectBank;
