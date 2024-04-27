@@ -132,7 +132,7 @@ const StudentProfile = () => {
 
   // const fetchStudentData = async (userId) => {
   //   try {
-  //     const response = await axios.get(`http://localhost:8000/students/getData/${userId}`);
+  //     const response = await axios.get(`https://project-bridge-backend.onrender.com/students/getData/${userId}`);
   //     setStudentData(response.data);
   //     // Populate form data with fetched student data
   //     setFormData(response.data);
@@ -144,7 +144,7 @@ const StudentProfile = () => {
   const fetchStudentData = async (userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/students/getData/${userId}`
+        `https://project-bridge-backend.onrender.com/students/getData/${userId}`
       );
       setStudentData(response.data);
       // Populate form data with fetched student data
@@ -189,7 +189,7 @@ const StudentProfile = () => {
     console.log("formData:", formData);
     console.log("inputs:", inputs);
     try {
-      await axios.put(`http://localhost:8000/students/updateData/${userId}`, {
+      await axios.put(`https://project-bridge-backend.onrender.com/students/updateData/${userId}`, {
         ...formData,
         ...inputs,
       });
@@ -210,7 +210,7 @@ const StudentProfile = () => {
   // const handleFilesUpload = async (e) => {
   //   e.preventDefault();
   //   try{
-  //     await axios.post(`http://localhost:8000/students/uploadFiles/${userId}`, { ...inputs });
+  //     await axios.post(`https://project-bridge-backend.onrender.com/students/uploadFiles/${userId}`, { ...inputs });
   //   } catch (error){
   //     console.log(error);
   //   }

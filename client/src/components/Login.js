@@ -4,7 +4,7 @@ import "./Login.css";
 
 const Login = () => {
   const handleGoogleLogin = (userType) => {
-    window.location.href = `http://localhost:8000/auth/google?user_type=${userType}`; // Pass userType as query parameter
+    window.location.href = `https://project-bridge-backend.onrender.com/auth/google?user_type=${userType}`; // Pass userType as query parameter
   }
 
   return (

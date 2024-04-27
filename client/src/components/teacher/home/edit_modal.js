@@ -42,7 +42,7 @@ function EditModal({ projectId, closeModal }) {
     const fetchProjectData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/projects/projectData/${projectId}`
+          `https://project-bridge-backend.onrender.com/projects/projectData/${projectId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch project data");
@@ -80,7 +80,7 @@ function EditModal({ projectId, closeModal }) {
     setValidated(false);
     try {
       const response = await fetch(
-        `http://localhost:8000/projects/updateProject/${projectId}`,
+        `https://project-bridge-backend.onrender.com/projects/updateProject/${projectId}`,
         {
           method: "PUT",
           headers: {

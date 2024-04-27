@@ -28,7 +28,7 @@ function TeacherHome() {
   }, []);
   const fetchProjects = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/projects/fetchProjects/${userId}`);
+      const response = await fetch(`https://project-bridge-backend.onrender.com/projects/fetchProjects/${userId}`);
       const data = await response.json();
       setProjects(data);
     } catch (error) {
@@ -38,7 +38,7 @@ function TeacherHome() {
 
   const saveProject = async (projectData) => {
     try {
-      const response = await fetch(`http://localhost:8000/projects/saveProject/${userId}`, {
+      const response = await fetch(`https://project-bridge-backend.onrender.com/projects/saveProject/${userId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,7 +56,7 @@ function TeacherHome() {
   const deleteProject = async (projectId) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/projects/deleteProject/${projectId}`,
+        `https://project-bridge-backend.onrender.com/projects/deleteProject/${projectId}`,
         {
           method: "DELETE",
         }
