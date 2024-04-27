@@ -132,9 +132,66 @@ exports.updateRequestStatus = async (req, res) => {
     request.status = status;
     await projectRequest.save();
 
+    console.log('Request status updated successfully');
+
+    // Check if the status is "accepted"
+    if (status === "accepted") {
+      // Find the project in the projectdb using the projectId
+      const project = await projectdb.findOne({ _id: projectId });
+
+      if (!project) {
+        return res.status(404).json({ message: 'Project not found' });
+      }
+
+      // Check if slots are filled
+      if (parseInt(project.filled_slots) >= parseInt(project.project_slots)) {
+        console.log('Slots filled already');
+        return res.status(400).json({ message: 'Slots filled already' });
+      }
+
+      // Increase filled slots and update finalized_students array
+      project.filled_slots = (parseInt(project.filled_slots) + 1).toString();
+      project.finalized_students.push(studentId);
+
+      await project.save();
+
+      console.log('Project slots updated successfully');
+    }
+
     res.json({ message: 'Request status updated successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
+// exports.updateRequestStatus = async (req, res) => {
+//   try {
+//     const { projectId, studentId } = req.params;
+//     const { status } = req.body;
+//     console.log("projectId:", projectId)
+//     // Find the document matching projectId
+//     const projectRequest = await requestsdb.findOne({ projectId });
+
+//     if (!projectRequest) {
+//       return res.status(404).json({ message: 'Project request not found' });
+//     }
+
+//     // Find the request in the requests array with matching studentId
+//     const request = projectRequest.requests.find(req => req.studentId === studentId);
+
+//     if (!request) {
+//       return res.status(404).json({ message: 'Student request not found for this project' });
+//     }
+
+//     // Update the status of the request
+//     request.status = status;
+//     await projectRequest.save();
+
+//     res.json({ message: 'Request status updated successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
