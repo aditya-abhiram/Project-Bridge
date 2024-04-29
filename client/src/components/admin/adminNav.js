@@ -14,9 +14,9 @@ import Tooltip from '@mui/material/Tooltip';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Avatar from '@mui/material/Avatar';
 import Logout from '@mui/icons-material/Logout';
-import './studentNav.css';
+// import './studentNav.css';
 
-const StudentNav = ({ userId }) => {
+const AdminNav = ({ userId }) => {
   const [userdata, setUserdata] = useState({});
   // const [showDropdown, setShowDropdown] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -30,7 +30,7 @@ const StudentNav = ({ userId }) => {
   };
 
   const handleProfileClick = () => {
-    navigate(`/students/StudentProfile/${userId}`); // Redirect to user profile page
+    navigate(``); // Redirect to user profile page
     handleClose(); // Close the menu
   }
   useEffect(() => {
@@ -40,21 +40,15 @@ const StudentNav = ({ userId }) => {
 
   const getUser = async () => {
     try {
-      const response = await axios.get(`https://project-bridge-backend.onrender.com/users/getUserData/${userId}`); // Fetch user data using userId
+      const response = await axios.get(`http://localhost:8000/users/getUserData/${userId}`); // Fetch user data using userId
       setUserdata(response.data);
     } catch (error) {
       console.log("error", error);
     }
   }
 
-  const redirectHome = () => {
-    navigate(`/students/StudentHome/${userId}`); // Redirect to user profile page
-    handleClose(); // Close the menu
-    // console.log("userdata:", userdata);
-  }
-
   const logout = () => {
-    window.open("https://project-bridge-backend.onrender.com/logout", "_self");
+    window.open("http://localhost:8000/logout", "_self");
   }
 
   // const toggleDropdown = () => {
@@ -66,7 +60,7 @@ const StudentNav = ({ userId }) => {
     <>
       <Navbar className="bg-body-tertiary mb-3" id="main_nav">
         <Container fluid id="main">
-          <Navbar.Brand href="#" onClick={redirectHome}>Hello {userdata?.displayName} ! </Navbar.Brand>
+          <Navbar.Brand href="#">Hello {userdata?.displayName} ! </Navbar.Brand>
           {/* <Dropdown show={showDropdown} onToggle={toggleDropdown}>
             <Dropdown.Toggle variant="light" id="dropdown-basic">
               <img src={userdata?.image} style={{ width: "50px", borderRadius: "50%" }} alt="" />
@@ -142,4 +136,4 @@ const StudentNav = ({ userId }) => {
   );
 }
 
-export default StudentNav;
+export default AdminNav;

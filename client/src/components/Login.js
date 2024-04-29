@@ -17,9 +17,9 @@ const Login = () => {
           </div>
         </div>
         <div className='child'>
-          <h1 style={{ textAlign: "center" }}>Login</h1>
           <button className='login-with-google-btn' onClick={() => handleGoogleLogin('teacher')}>Login as Teacher</button>
           <button className='login-with-google-btn' onClick={() => handleGoogleLogin('student')}>Login as Student</button>
+          <button className='login-with-google-btn' onClick={() => handleGoogleLogin('admin')}>Login as Admin</button>
         </div>
       </div>
     </div>

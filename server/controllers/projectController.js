@@ -24,7 +24,7 @@ exports.saveProject = async (req, res) => {
           project_slots: projectSlots,
           cg_cutoff: cgpaCutoff,
           pre_requisites: prerequisites,
-          filled_slots: "0"
+          filled_slots: 0,
         });
     
         // Save the project to the database

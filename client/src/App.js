@@ -11,10 +11,21 @@ import StudentProfile from './components/student/student_profile';
 import TeacherProfile from './components/teacher/profile/teacher_profile';
 import ProjectBank from './components/student/projectBank/student_projectBank';
 import ProjectRequests from './components/teacher/requests/teacher_requestsPage';
+import StudentSideBar from './components/student/studentSideBar';
+import AdminHome  from "./components/admin/admin_home";
+import AdminNav from './components/admin/adminNav';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Route, Routes, useParams } from 'react-router-dom';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 function App() {
   return (
+    <ThemeProvider theme={darkTheme}>
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/students/StudentHome/:userId/*" element={<StudentPageWrapper component={StudentHome} />} />
@@ -23,8 +34,10 @@ function App() {
       <Route path="/teachers/TeacherProfile/:userId/*" element={<TeacherPageWrapper component={TeacherProfile} />} />
       <Route path="/students/ProjectBank/:userId/*" element={<StudentPageWrapper component={ProjectBank} />} />
       <Route path="/teachers/RequestsPage/:userId/*" element={<TeacherPageWrapper component={ProjectRequests}/>} />
+      <Route path="/admin/AdminHome/:userId/*" element={<AdminPageWrapper component={AdminHome} />} />
       <Route path="*" element={<Error />} />
     </Routes>
+    </ThemeProvider>
   );
 }
 
@@ -32,7 +45,20 @@ function StudentPageWrapper({ component: Component }) {
   const { userId } = useParams();
   return (
     <>
+    <StudentSideBar>
       <StudentNav userId={userId} />
+      <Component />
+    </StudentSideBar>
+    </>
+  );
+}
+
+function AdminPageWrapper({ component: Component }) {
+  const { userId } = useParams();
+  return (
+    <>
+      {/* Assuming there's an AdminNav component for admin navigation */}
+      <AdminNav userId={userId} />
       <Component />
     </>
   );

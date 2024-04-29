@@ -22,7 +22,8 @@ import Snackbar from "@mui/material/Snackbar";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "../../student/projectBank/Alert";
 import Chip from "@mui/material/Chip";
-import ClearIcon from '@mui/icons-material/Clear';
+// import ClearIcon from '@mui/icons-material/Clear';
+import UndoIcon from '@mui/icons-material/Undo';
 import "./teacher_requestsPage.css"
 import Clear from '@mui/icons-material/Clear';
 const ProjectRequests = () => {
@@ -207,14 +208,14 @@ const Row = ({ request, cgCutoff, updateRequestStatus, projectId }) => {
             <Stack direction="row" spacing={1}>
               <Chip label="Approved" color="success" variant="outlined" />
               <IconButton aria-label="Example" onClick={() => updateRequestStatus(projectId, request.studentId, 'pending')}>
-                <ClearIcon color="primary"  fontSize="medium" />
+                <UndoIcon color="primary"  fontSize="medium" />
               </IconButton>
             </Stack>
           ) : (
             <Stack direction="row" spacing={1}>
               <Chip label="Rejected" color="primary" variant="outlined"  />
               <IconButton aria-label="Example" onClick={() => updateRequestStatus(projectId, request.studentId, 'pending')}>
-                <ClearIcon color="primary"  fontSize="medium" />
+                <UndoIcon color="primary"  fontSize="medium" />
               </IconButton>
             </Stack>
           )}
