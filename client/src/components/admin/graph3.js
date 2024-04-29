@@ -11,7 +11,7 @@ export default function Graph3() {
 
   const fetchProjectTypeCounts = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/admin/project-type-counts');
+      const response = await axios.get('https://project-bridge-backend.onrender.com/admin/project-type-counts');
       setProjectTypeCounts(response.data);
     } catch (error) {
       console.error('Error fetching project type counts:', error);

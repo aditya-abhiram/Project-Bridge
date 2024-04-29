@@ -38,7 +38,7 @@ const ProjectBank = () => {
     const fetchProjectBankData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/students/projectBank/${userId}`
+          `https://project-bridge-backend.onrender.com/students/projectBank/${userId}`
         );
         console.log("Project Bank Data:", response.data);
         setProjects(response.data);
@@ -50,7 +50,7 @@ const ProjectBank = () => {
     const fetchLikedProjects = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/students/getLiked/${userId}`
+          `https://project-bridge-backend.onrender.com/students/getLiked/${userId}`
         );
         console.log("Liked Projects Data:", response.data);
         setLikedProjects(response.data);
@@ -69,7 +69,7 @@ const ProjectBank = () => {
       try {
         const requests = projects.map((project) =>
           axios.get(
-            `http://localhost:8000/students/getProjectStatus/${userId}/${project.projectId}`
+            `https://project-bridge-backend.onrender.com/students/getProjectStatus/${userId}/${project.projectId}`
           )
         );
         const responses = await Promise.all(requests);
@@ -96,7 +96,7 @@ const ProjectBank = () => {
           const requests = {};
           for (const project of projects) {
             const response = await axios.get(
-              `http://localhost:8000/requests/sentRequests/${project.projectId}/${userId}`
+              `https://project-bridge-backend.onrender.com/requests/sentRequests/${project.projectId}/${userId}`
             );
             requests[project.projectId] = response.data ? true : false;
           }
@@ -114,12 +114,12 @@ const ProjectBank = () => {
     try {
       if (isChecked) {
         await axios.post(
-          `http://localhost:8000/students/saveLiked/${userId}/${projectId}`
+          `https://project-bridge-backend.onrender.com/students/saveLiked/${userId}/${projectId}`
         );
         setLikedProjects([...likedProjects, { projectId }]);
       } else {
         await axios.delete(
-          `http://localhost:8000/students/removeLiked/${userId}/${projectId}`
+          `https://project-bridge-backend.onrender.com/students/removeLiked/${userId}/${projectId}`
         );
         setLikedProjects(
           likedProjects.filter((project) => project.projectId !== projectId)

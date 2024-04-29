@@ -11,7 +11,7 @@ export default function Graph5() {
 
   const fetchSlotCountsByDepartment = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/admin/slot-counts-by-department');
+      const response = await axios.get('https://project-bridge-backend.onrender.com/admin/slot-counts-by-department');
       setSlotCountsByDepartment(response.data);
     } catch (error) {
       console.error('Error fetching slot counts by department:', error);

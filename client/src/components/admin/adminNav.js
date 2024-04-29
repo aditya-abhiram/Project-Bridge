@@ -40,7 +40,7 @@ const AdminNav = ({ userId }) => {
 
   const getUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/users/getUserData/${userId}`); // Fetch user data using userId
+      const response = await axios.get(`https://project-bridge-backend.onrender.com/users/getUserData/${userId}`); // Fetch user data using userId
       setUserdata(response.data);
     } catch (error) {
       console.log("error", error);
@@ -48,7 +48,7 @@ const AdminNav = ({ userId }) => {
   }
 
   const logout = () => {
-    window.open("http://localhost:8000/logout", "_self");
+    window.open("https://project-bridge-backend.onrender.com/logout", "_self");
   }
 
   // const toggleDropdown = () => {

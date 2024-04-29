@@ -11,7 +11,7 @@ export default function Graph1() {
 
   const fetchProjectsPerDepartment = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/admin/projects-per-department');
+      const response = await axios.get('https://project-bridge-backend.onrender.com/admin/projects-per-department');
       setDepartmentData(response.data);
     } catch (error) {
       console.error('Error fetching projects per department:', error);

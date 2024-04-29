@@ -11,7 +11,7 @@ export default function Graph2() {
 
   const fetchAvgRequestsPerDepartment = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/admin/avg-requests-per-department');
+      const response = await axios.get('https://project-bridge-backend.onrender.com/admin/avg-requests-per-department');
       setAvgRequestsData(response.data);
     } catch (error) {
       console.error('Error fetching average requests per department:', error);
