@@ -13,9 +13,9 @@
 }
 
 #graphs_dashboard {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    display: ruby;
+    /* flex-wrap: wrap;
+    gap: 20px; */
   }
   
   #graph_bg {
