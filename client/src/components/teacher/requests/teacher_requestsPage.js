@@ -22,6 +22,7 @@ import Snackbar from "@mui/material/Snackbar";
 import AlertTitle from "@mui/material/AlertTitle";
 import Alert from "../../student/projectBank/Alert";
 import Chip from "@mui/material/Chip";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 // import ClearIcon from '@mui/icons-material/Clear';
 import UndoIcon from '@mui/icons-material/Undo';
 import "./teacher_requestsPage.css"
@@ -231,7 +232,47 @@ const Row = ({ request, cgCutoff, updateRequestStatus, projectId }) => {
               </Typography>
               <Typography variant="body1" gutterBottom>
                 <strong>Pre requisites fulfilled:</strong> {pre_requisites_fulfilled.join(', ')}
-              </Typography>
+                </Typography>
+                <div style={{display:'inline-flex'}}>
+                {studentInfo.resume && (
+                        <div style={{marginRight:'17px'}}>
+                          <Button
+                            variant="outlined"
+                            startIcon={
+                              <VisibilityIcon
+                                color="success"
+                                marginLeft="21px"
+                              />
+                              
+                            }
+                            style={{width:'max-content'}}
+                            onClick={() => window.open(studentInfo.resume.resumeUrl, "_blank")}
+                          >
+                            {`Student Resume`}
+                          </Button>
+                        </div>
+                      )}
+                  {studentInfo.performanceSheet && (
+                            <div>
+                              <Button
+                                variant="outlined"
+                                startIcon={
+                                  <VisibilityIcon
+                                    color="success"
+                                    marginLeft="21px"
+                                  />
+                                }
+                                onClick={() =>
+                                  window.open(studentInfo.performanceSheet.performanceSheetUrl, "_blank")
+                                }
+                                style={{width:'max-content'}}
+                              >
+                                {`Performance Sheet`}
+                              </Button>
+                            </div>
+                          )}
+                </div>
+
             </Box>
           </Collapse>
         </TableCell>

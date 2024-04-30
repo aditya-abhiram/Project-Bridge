@@ -12,7 +12,7 @@ import {
   CCardText,
 } from "@coreui/react";
 import Button from '@mui/material/Button';
-
+import AddIcon from '@mui/icons-material/Add';
 import './teacher_home.css';
 
 function TeacherHome() {
@@ -90,20 +90,27 @@ function TeacherHome() {
 
   return (
     <>
-    <a href={`/teachers/RequestsPage/${userId}`} style={{left:'48%', position:'relative', color:'white'}}> Project Requests </a>
     <div id="body">
-      <Button
-        className="mb-3"
-        id="addProjectBtn"
-        onClick={() => setVisible(!visible)}
-        aria-expanded={visible}
-        aria-controls="collapseWidthExample"
-        variant="outlined"
-      >
-        Add Project
-      </Button>
+      <div style={{display:'flex'}}>
+          <h3
+          style={{width:'20%', alignContent:'end'}}
+          >Current Projects</h3>
+          <Button
+            className="mb-3"
+            id="addProjectBtn"
+            onClick={() => setVisible(!visible)}
+            aria-expanded={visible}
+            aria-controls="collapseWidthExample"
+            variant="outlined"
+            startIcon={<AddIcon/>}
+          >
+            Add Project
+          </Button>
+      </div>
+      
+      <hr></hr>
       <div>
-        <CCollapse id="collapseWidthExample" visible={visible}>
+        <CCollapse id="collapseWidthExample" visible={visible} >
           <CCard id="project_modal">
             <CCardBody>
               <ProjectForm
@@ -113,11 +120,13 @@ function TeacherHome() {
               />
             </CCardBody>
           </CCard>
+          <hr></hr>
         </CCollapse>
+        
       </div>
-      <hr></hr>
+
       <div>
-        <h3>Current Projects</h3>
+        
         <div id="current_projects_div">
         {projects.map((project, index) => (
           <CCard key={project._id} id="project_card">

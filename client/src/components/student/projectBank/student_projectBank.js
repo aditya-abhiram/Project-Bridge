@@ -15,15 +15,25 @@ import {
   Collapse,
   Button,
   Checkbox,
+  TextField,
+  FormControlLabel,
+  Switch,
+  TableFooter
+  
 } from "@mui/material";
+import {
+  // CFormInput,
+  CFormSelect,
+} from "@coreui/react";
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { DataGrid } from "@mui/x-data-grid";
 import RequestFormModal from "./RequestFormModal";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import "./student_projectBank.css";
 const ProjectBank = () => {
   const { userId } = useParams();
@@ -34,6 +44,13 @@ const ProjectBank = () => {
   const [draftDetails, setDraftDetails] = useState(null);
   const [sentRequests, setSentRequests] = useState([]);
   const [projectStatuses, setProjectStatuses] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const [projectType, setProjectType] = useState("Select"); // State variable for project type
+  const [department, setDepartment] = useState("Select"); // State variable for department
+  const [eligibleOnly, setEligibleOnly] = useState(false); 
+  const [showLikedProjects, setShowLikedProjects] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const rowsPerPage = 5;
   useEffect(() => {
     const fetchProjectBankData = async () => {
       try {
@@ -136,6 +153,65 @@ const ProjectBank = () => {
     }));
   };
 
+  const filteredProjects = projects.filter((project) => {
+    const searchKeywords = searchQuery.toLowerCase().split(" ");
+    const matchesSearchQuery = searchKeywords.every((keyword) =>
+      project.project_name.toLowerCase().includes(keyword) ||
+      project.teacher_name.toLowerCase().includes(keyword)
+    );
+    const matchesProjectType = projectType === "Select" || project.project_type === projectType;
+    const matchesDepartment = department === "Select" || project.department === department;
+    const matchesEligibility = !eligibleOnly || project.cg_eligibility === "Eligible";
+    const matchesLikedProjects = !showLikedProjects || likedProjects.some((liked) => liked.projectId === project.project_name);
+    return matchesSearchQuery && matchesProjectType && matchesDepartment && matchesEligibility && matchesLikedProjects;
+  });
+
+  const handleShowLikedProjectsChange = (event) => {
+    setShowLikedProjects(event.target.checked);
+  };
+  // Event handlers for updating project type and department
+  const handleProjectTypeChange = (event) => {
+    setProjectType(event.target.value);
+  };
+
+  const handleDepartmentChange = (event) => {
+    setDepartment(event.target.value);
+  };
+  // Event handler for updating search query state
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleEligibilityChange = (event) => {
+    setEligibleOnly(event.target.checked);
+  };
+
+  // Calculate start and end indices of the current page
+const startIndex = currentPage * rowsPerPage;
+const endIndex = startIndex + rowsPerPage;
+
+// Handle next page button click
+const handleNextPage = () => {
+  setCurrentPage((prevPage) => prevPage + 1);
+};
+
+// Handle previous page button click
+const handlePreviousPage = () => {
+  setCurrentPage((prevPage) => prevPage - 1);
+};
+
+// Get the current page's projects
+const currentPageProjects = filteredProjects.slice(startIndex, endIndex);
+
+  // Function to clear all filters
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setProjectType("Select");
+    setDepartment("Select");
+    setEligibleOnly(false);
+  };
+
+
   const Row = ({ project, projectStatuses }) => {
     const [open, setOpen] = useState(false);
     if (!project || !project.project_name) {
@@ -156,6 +232,7 @@ const ProjectBank = () => {
       setIsRequestFormOpen(true);
     };
 
+
     return (
       <>
         <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -173,7 +250,7 @@ const ProjectBank = () => {
             {project.project_name}
           </TableCell>
           <TableCell>{project.project_type}</TableCell>
-          <TableCell>{project.project_domain}</TableCell>
+          {/* <TableCell>{project.project_domain}</TableCell> */}
           <TableCell>{project.teacher_name}</TableCell>
           <TableCell>{project.department}</TableCell>
           <TableCell>{project.pre_requisites.join(", ")}</TableCell>
@@ -198,10 +275,8 @@ const ProjectBank = () => {
                   Project Details
                 </Typography>
                 <Typography>{`Project Description: ${project.project_description}`}</Typography>
-                <Typography>{`Pre-requisites: ${project.pre_requisites.join(
-                  ", "
-                )}`}</Typography>
                 <Typography>{`CG Cutoff: ${project.cg_cutoff}`}</Typography>
+                <Typography>{`Project Domain: ${project.project_domain}`}</Typography>
                 <Typography>{`CG Eligibility: ${project.cg_eligibility}`}</Typography>
                 {/* <Button onClick={() => handleRequest(project)} variant="contained" color="primary">Request</Button> */}
                 {/* Render other project details here */}
@@ -235,16 +310,73 @@ const ProjectBank = () => {
   };
 
   return (
-    <div>
-      <h1>Project Bank</h1>
-      <TableContainer component={Paper} id="main_table">
+    <div style={{width:"90%", marginLeft:"5%"}}>
+      <h1 style={{marginTop:"2%"}}>Project Bank</h1>
+      <hr></hr>
+      <Stack direction="row" spacing={2}>
+            <TextField
+              label="Enter Project Name or Teacher Name..."
+              variant="outlined"
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+              style={{ marginBottom: 20, width:'350px'}}
+            />
+            <CFormSelect
+              id="floatingInput"
+              floatingLabel="Project Type"
+              placeholder="name@example.com"
+              value={projectType}
+              onChange={handleProjectTypeChange}
+              options={[
+                "Select",
+                { label: "Design Project (DOP)", value: "DOP" },
+                { label: "Lab Project (LOP)", value: "LOP" },
+                { label: "Study Project (SOP)", value: "SOP" },
+              ]}
+              
+            />
+            <CFormSelect
+              id="floatingInput"
+              floatingLabel="Department"
+              placeholder="name@example.com" 
+              name="department" onChange={handleDepartmentChange}
+              options={[
+                "Select",
+                { label: "Biological Sciences (BIO)", value: "BIO" },
+                { label: "Chemical Engineering (CHE)", value: "CHE" },
+                { label: "Chemistry (CHEM)", value: "CHEM" },
+                { label: "Civil Engineering (CE)", value: "CE" },
+                { label: "Computer Science (CS)", value: "CS" },
+                { label: "Economics and Finance (ECON)", value: "ECON" },
+                { label: "Electrical & Electronics Engineering (EEE)", value: "EEE" },
+                { label: "Humanities and Social Sciences (HSS)", value: "HSS" },
+                { label: "Mathematics (MATH)", value: "MATH" },
+                { label: "Mechanical Engineering (ME)", value: "ME" },
+                { label: "Pharmacy (PHA)", value: "PHA" },
+                { label: "Physics(PHY)", value: "PHY" },
+              ]}
+              />
+            <FormControlLabel
+              control={<Switch checked={eligibleOnly} onChange={handleEligibilityChange} />}
+              label="Show Eligible Only"
+              style={{alignItems:'baseline'}}
+            />
+            <FormControlLabel
+                control={<Switch checked={showLikedProjects} onChange={handleShowLikedProjectsChange} />}
+                label="Show Liked Projects"
+                style={{alignItems:'baseline'}}
+              />
+            <Button variant="outlined" onClick={handleClearFilters} id="clr_btn" >Clear Filters</Button>
+      </Stack>
+      
+      <TableContainer component={Paper} id="main_table" style={{width:"100%", marginLeft:"0%", left: "0px"}}>
         <Table aria-label="collapsible table">
-          <TableHead>
+          <TableHead style={{backgroundColor:"black", borderBottom:"0.2px solid white"}}>
             <TableRow>
               <TableCell width="2%" />
               <TableCell width="20%">Project Name</TableCell>
               <TableCell width="8%">Project Type</TableCell>
-              <TableCell width="10%">Project Domain</TableCell>
+              {/* <TableCell width="10%">Project Domain</TableCell> */}
               <TableCell width="10%">Teacher Name</TableCell>
               <TableCell width="7%">Department</TableCell>
               <TableCell width="12%">Pre-requisites</TableCell>
@@ -255,7 +387,7 @@ const ProjectBank = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {projects.map((project, index) => (
+            {currentPageProjects.map((project, index) => (
               <Row
                 key={index}
                 project={project}
@@ -265,6 +397,18 @@ const ProjectBank = () => {
               />
             ))}
           </TableBody>
+          <TableFooter>
+            <TableRow style={{paddingBottom:'0'}}>
+              <TableCell colSpan={11} style={{ textAlign: "right" , borderBottom:'none', paddingBottom:'0' }}>
+                <Button onClick={handlePreviousPage} disabled={currentPage === 0} id='pagination_btn' startIcon={<ArrowBackIosIcon/>}>
+                  Previous
+                </Button>
+                <Button onClick={handleNextPage} disabled={endIndex >= filteredProjects.length} id='pagination_btn' endIcon={<ArrowForwardIosIcon/>}>
+                  Next
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
       {isRequestFormOpen && (

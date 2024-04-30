@@ -21,7 +21,7 @@ const StudentNav = ({ userId }) => {
   // const [showDropdown, setShowDropdown] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };

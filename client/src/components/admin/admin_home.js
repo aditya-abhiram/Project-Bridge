@@ -4,12 +4,17 @@ import Graph2 from './graph2';
 import Graph3 from './graph3';
 import Graph4 from './graph4';
 import Graph5 from './graph5';
+import Graph6 from './graph6';
+
 import "./admin_home.css"
 function AdminHome() {
   return (
     <>
-    <h1>Admin Dashboard</h1>
     <div id='graphs_dashboard'>
+    <div style={{ width: '100%' }}>
+        <h5></h5>
+        <Graph6  />
+      </div>
     <div id="graph_bg">
         <h5>Projects per Department</h5>
       <Graph1  />

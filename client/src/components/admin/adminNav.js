@@ -59,7 +59,7 @@ const AdminNav = ({ userId }) => {
     <>
     <>
       <Navbar className="bg-body-tertiary mb-3" id="main_nav">
-        <Container fluid id="main">
+        <Container fluid id="main" style={{marginTop:"2%", marginBottom:"3%"}}>
           <Navbar.Brand href="#">Hello {userdata?.displayName} ! </Navbar.Brand>
           {/* <Dropdown show={showDropdown} onToggle={toggleDropdown}>
             <Dropdown.Toggle variant="light" id="dropdown-basic">

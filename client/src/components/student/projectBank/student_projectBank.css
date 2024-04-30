@@ -38,3 +38,14 @@ td, th{
     position: relative;
     left: 5%;
 }
+
+#clr_btn{
+    margin-top: 0% !important;
+    margin-left: 8% !important;
+    margin-right: 0% !important;
+}
+
+#pagination_btn{
+    margin: 0% !important;
+    margin-left: 2% !important;
+}

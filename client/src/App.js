@@ -12,6 +12,7 @@ import TeacherProfile from './components/teacher/profile/teacher_profile';
 import ProjectBank from './components/student/projectBank/student_projectBank';
 import ProjectRequests from './components/teacher/requests/teacher_requestsPage';
 import StudentSideBar from './components/student/studentSideBar';
+import TeacherSideBar from './components/teacher/teacherSideBar';
 import AdminHome  from "./components/admin/admin_home";
 import AdminNav from './components/admin/adminNav';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -45,7 +46,7 @@ function StudentPageWrapper({ component: Component }) {
   const { userId } = useParams();
   return (
     <>
-    <StudentSideBar>
+    <StudentSideBar userId={userId} >
       <StudentNav userId={userId} />
       <Component />
     </StudentSideBar>
@@ -68,8 +69,10 @@ function TeacherPageWrapper({ component: Component }) {
   const { userId } = useParams();
   return (
     <>
+    <TeacherSideBar userId={userId}>
       <TeacherNav userId={userId} />
       <Component />
+      </TeacherSideBar>
     </>
   );
 }

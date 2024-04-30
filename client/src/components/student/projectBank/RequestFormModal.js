@@ -120,6 +120,64 @@ const RequestFormModal = ({
     setShowConfirmation(true);
   };
   
+  // const handleConfirmSendRequest = async () => {
+  //   try {
+  //     setIsLoading(true);
+  //     const requestData = {
+  //       studentId: userId,
+  //       reason_to_do_project: formData.whyWantToDoProject,
+  //       pre_requisites_fullfilled: formData.selectedPrerequisites,
+  //     };
+  
+  //     // Send the request to store the request data
+  //     await axios.post(
+  //       `https://project-bridge-backend.onrender.com/requests/storeRequest/${selectedProject.projectId}/${userId}`,
+  //       requestData
+  //     );
+  
+  //     // Update the sentRequests state after sending the request
+  //     setSentRequests({
+  //       ...sentRequests,
+  //       [selectedProject.projectId]: true,
+  //     });
+      
+  //     setProjectStatuses({
+  //       ...projectStatuses,
+  //       [selectedProject.projectId]: "Request Sent",
+  //   });
+
+  //     // Call the API to delete the draft
+  //     await axios.delete(`https://project-bridge-backend.onrender.com/students/deleteDraft/${userId}/${selectedProject.projectId}`);
+  
+  //     // Show success message
+  //     setSnackbarSeverity("success");
+  //     setSnackbarTitle("Success");
+  //     setSnackbarMessage("Request sent successfully");
+  //     setAlertStyle({
+  //       backgroundColor: "#ddffdd",
+  //       color: "green",
+  //     });
+  //     setSnackbarOpen(true);
+  
+  //     // Close modal after 5 seconds
+  //     setTimeout(() => {
+  //       onClose();
+  //       setIsLoading(false);
+  //     }, 3000);
+  //   } catch (error) {
+  //     // Handle error
+  //     setSnackbarSeverity("error");
+  //     setSnackbarTitle("Failure");
+  //     setSnackbarMessage("Error sending request");
+  //     console.error("Error sending request:", error);
+  //     setAlertStyle({
+  //       backgroundColor: "#ffdddd",
+  //       color: "red",
+  //     });
+  //     setSnackbarOpen(true); // Open Snackbar for error case
+  //   }
+  // };
+  
   const handleConfirmSendRequest = async () => {
     try {
       setIsLoading(true);
@@ -144,10 +202,7 @@ const RequestFormModal = ({
       setProjectStatuses({
         ...projectStatuses,
         [selectedProject.projectId]: "Request Sent",
-    });
-
-      // Call the API to delete the draft
-      await axios.delete(`https://project-bridge-backend.onrender.com/students/deleteDraft/${userId}/${selectedProject.projectId}`);
+      });
   
       // Show success message
       setSnackbarSeverity("success");
@@ -158,6 +213,9 @@ const RequestFormModal = ({
         color: "green",
       });
       setSnackbarOpen(true);
+  
+      // Call the API to delete the draft
+      await axios.delete(`https://project-bridge-backend.onrender.com/students/deleteDraft/${userId}/${selectedProject.projectId}`);
   
       // Close modal after 5 seconds
       setTimeout(() => {
@@ -175,11 +233,9 @@ const RequestFormModal = ({
         color: "red",
       });
       setSnackbarOpen(true); // Open Snackbar for error case
+      setIsLoading(false);
     }
   };
-  
-  
-  
   
 
   const handleBack = () => {

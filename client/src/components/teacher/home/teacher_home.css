@@ -68,8 +68,13 @@
   }
 
 #addProjectBtn{
-  left: 1%;
-  position: relative;
+    /* left: 1%; */
+    /* position: relative; */
+    width: max-content;
+    width: 12%;
+    align-content: end;
+    align-items: center;
+    margin-bottom: 5px !important;
   }
 
 .btn{

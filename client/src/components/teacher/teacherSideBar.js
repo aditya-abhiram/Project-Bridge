@@ -14,12 +14,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import Tooltip from '@mui/material/Tooltip';
-import './studentSideBar.css';
+// import './teacherSideBar.css';
 import { useNavigate} from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -91,21 +91,21 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 
-export default function StudentSideBar({ children, userId }) {
+export default function TeacherSideBar({ children, userId }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
 
   const redirectHome = () => {
-    navigate(`/students/StudentHome/${userId}`);
+    navigate(`/teachers/TeacherHome/${userId}`);
   };
   const redirectProjectBank = () => {
-    navigate(`/students/ProjectBank/${userId}`);
+    navigate(`/teachers/RequestsPage/${userId}`);
     console.log("go to projectbank");
   };
 
   const redirectProfile = () => {
-    navigate(`/students/StudentProfile/${userId}`);
+    navigate(`/teachers/TeacherProfile/${userId}`);
     console.log("go to profile");
   };
   
@@ -173,7 +173,7 @@ export default function StudentSideBar({ children, userId }) {
         <List>
             {[
               { text: 'Home', icon: <HomeIcon />, onClick: redirectHome},
-              { text: 'Project Bank', icon: <AccountBalanceIcon />, onClick: redirectProjectBank },
+              { text: 'Project Requests', icon: <ChecklistRtlIcon />, onClick: redirectProjectBank },
               { text: 'Profile', icon: <AccountBoxIcon />, onclick: redirectProfile},
               { text: 'Logout', icon: <LogoutIcon />, onclick: logout }
             ].map((item, index) => (
