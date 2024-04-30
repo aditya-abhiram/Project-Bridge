@@ -36,10 +36,11 @@ const StudentHome = () => {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead style={{backgroundColor:"black", borderBottom:"0.2px solid white"}}>
             <TableRow>
-              <TableCell>Project Name</TableCell>
+              <TableCell width="35%">Project Name</TableCell>
               <TableCell>Project Type</TableCell>
               <TableCell>Professor Name</TableCell>
               <TableCell>Department</TableCell>
+              <TableCell>Room Number</TableCell>
               <TableCell>Available Slots</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
@@ -51,6 +52,7 @@ const StudentHome = () => {
                 <TableCell>{project.projectType}</TableCell>
                 <TableCell>{project.prof_name}</TableCell>
                 <TableCell>{project.department}</TableCell>
+                <TableCell>{`${project.block} ${project.roomNumber}`}</TableCell>
                 <TableCell>{project.project_slots - project.filled_slots}</TableCell>
                 <TableCell>
                   <Chip
